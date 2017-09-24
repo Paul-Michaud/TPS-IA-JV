@@ -340,6 +340,7 @@ void FightBarFly::Execute(Miner* pMiner)
 
 void FightBarFly::Exit(Miner* pMiner)
 {
+	SetTextColor(FOREGROUND_RED | FOREGROUND_INTENSITY);
 	cout << "\n" << GetNameOfEntity(pMiner->ID()) << ": " << "That's was a good fight but you lost !";
 }
 
