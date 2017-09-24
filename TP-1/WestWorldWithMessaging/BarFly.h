@@ -24,7 +24,7 @@ template <class entity_type> class State; //pre-fixed with "template <class enti
 struct Telegram;
 
 //the amount of drinks the barfly must have before he gets aggressive
-const int DrinksAggressive = 5;
+const int DrinksAggressive = 3;
 
 //the amount of drinks the barfly must have before he sleeps (If he didn't fight)
 const int DrinksSleep = 9;

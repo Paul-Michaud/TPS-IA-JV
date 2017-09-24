@@ -245,14 +245,34 @@ void QuenchThirst::Execute(Miner* pMiner)
 
 void QuenchThirst::Exit(Miner* pMiner)
 { 
-  cout << "\n" << GetNameOfEntity(pMiner->ID()) << ": " << "Leaving the saloon, feelin' good";
+  //cout << "\n" << GetNameOfEntity(pMiner->ID()) << ": " << "Leaving the saloon, feelin' good";
 }
 
 
 bool QuenchThirst::OnMessage(Miner* pMiner, const Telegram& msg)
 {
-  //send msg to global message handler
-  return false;
+	SetTextColor(BACKGROUND_RED | FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
+
+	switch (msg.Msg){
+
+		case Msg_BarFlyWantsToFight:
+
+			cout << "\nMessage handled by " << GetNameOfEntity(pMiner->ID())
+				<< " at time: " << Clock->GetCurrentTime();
+
+			SetTextColor(FOREGROUND_RED | FOREGROUND_INTENSITY);
+
+			cout << "\n" << GetNameOfEntity(pMiner->ID())
+				<< ": Tannon is still here to lose a fight ? Let's go !";
+
+			pMiner->GetFSM()->ChangeState(FightBarFly::Instance());
+
+			return true;
+
+	}//end switch
+
+	return false; //send message to global message handler
+
 }
 
 //------------------------------------------------------------------------EatStew
@@ -290,3 +310,42 @@ bool EatStew::OnMessage(Miner* pMiner, const Telegram& msg)
 }
 
 
+//------------------------------------------------------------------------FightBarFly
+
+FightBarFly* FightBarFly::Instance()
+{
+	static FightBarFly instance;
+
+	return &instance;
+}
+
+
+void FightBarFly::Enter(Miner* pMiner){
+	cout << "\n" << GetNameOfEntity(pMiner->ID()) << ": " << "Hey ! Tannon, I'm here !";
+}
+
+void FightBarFly::Execute(Miner* pMiner)
+{
+	cout << "\n" << GetNameOfEntity(pMiner->ID()) << " is fighting.";
+
+	//let Bar Fly know that the Miner wonthe fight
+	Dispatch->DispatchMessage(SEND_MSG_IMMEDIATELY, //time delay
+		pMiner->ID(),        //ID of sender
+		ent_BarFly,            //ID of recipient
+		Msg_MinerFightsBarFly,   //the message
+		NO_ADDITIONAL_INFO);
+
+	pMiner->GetFSM()->RevertToPreviousState();
+}
+
+void FightBarFly::Exit(Miner* pMiner)
+{
+	cout << "\n" << GetNameOfEntity(pMiner->ID()) << ": " << "That's was a good fight but you lost !";
+}
+
+
+bool FightBarFly::OnMessage(Miner* pMiner, const Telegram& msg)
+{
+	//send msg to global message handler
+	return false;
+}

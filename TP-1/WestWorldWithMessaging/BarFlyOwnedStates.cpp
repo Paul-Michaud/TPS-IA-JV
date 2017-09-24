@@ -87,22 +87,53 @@ void FightMinerBob::Enter(BarFly* pBarFly)
 
 void FightMinerBob::Execute(BarFly* pBarFly)
 {
+
 	pBarFly->BuyAndDrinkABeer();
-	cout << "\n" << GetNameOfEntity(pBarFly->ID()) << ": " << "Gimme one more beer now ! I'm angry !";
+	cout << "\n" << GetNameOfEntity(pBarFly->ID()) << ": " << "Grumph where is the fukin' miner ?! Gimme one more beer now ! I'm angry !";
 	if (pBarFly->isTired()) {
 		pBarFly->GetFSM()->ChangeState(Sleeping::Instance());
 	}
+
+	//let Miner Bob know that the Bar Fly wants to fight
+	Dispatch->DispatchMessage(SEND_MSG_IMMEDIATELY, //time delay
+		pBarFly->ID(),        //ID of sender
+		ent_Miner_Bob,            //ID of recipient
+		Msg_BarFlyWantsToFight,   //the message
+		NO_ADDITIONAL_INFO);
+
 }
 
 
 void FightMinerBob::Exit(BarFly* pBarFly)
 {
+	cout << "\n" << GetNameOfEntity(pBarFly->ID()) << " lost the fight.";
 	cout << "\n" << GetNameOfEntity(pBarFly->ID()) << ": " << "Aww so tired now ...";
 }
 
 
 bool FightMinerBob::OnMessage(BarFly* pBarFly, const Telegram& msg)
 {
+
+	SetTextColor(BACKGROUND_RED | FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
+
+	switch (msg.Msg) {
+
+	case Msg_MinerFightsBarFly:
+
+		cout << "\nMessage handled by " << GetNameOfEntity(pBarFly->ID())
+			<< " at time: " << Clock->GetCurrentTime();
+
+		SetTextColor(FOREGROUND_GREEN | FOREGROUND_BLUE);
+
+		pBarFly->GetFSM()->ChangeState(Sleeping::Instance());
+
+		return true;
+
+	}//end switch
+
+	return false; //send message to global message handler
+
+
 	//send msg to global message handler
 	return false;
 }

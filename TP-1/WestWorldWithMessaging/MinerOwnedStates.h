@@ -173,6 +173,35 @@ public:
 };
 
 
+//------------------------------------------------------------------------
+//
+//  Entity will fight against a Bar Fly in the saloon
+//------------------------------------------------------------------------
+class FightBarFly : public State<Miner>
+{
+private:
+
+	FightBarFly() {}
+
+	//copy ctor and assignment should be private
+	FightBarFly(const FightBarFly&);
+	FightBarFly& operator=(const FightBarFly&);
+
+public:
+
+	//this is a singleton
+	static FightBarFly* Instance();
+
+	virtual void Enter(Miner* miner);
+
+	virtual void Execute(Miner* miner);
+
+	virtual void Exit(Miner* miner);
+
+	virtual bool OnMessage(Miner* agent, const Telegram& msg);
+};
+
+
 
 
 #endif
