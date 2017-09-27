@@ -100,7 +100,7 @@ void FightMinerBob::Execute(BarFly* pBarFly)
 
 void FightMinerBob::Exit(BarFly* pBarFly)
 {
-	pBarFly->pushMsg(MSG, "Roo, I lost the fight ! Aw so tired now ...");
+	pBarFly->pushMsg(MSG, "Aw so tired now ...");
 }
 
 
@@ -112,8 +112,18 @@ bool FightMinerBob::OnMessage(BarFly* pBarFly, const Telegram& msg)
 	case Msg_MinerFightsBarFly:
 
 		pBarFly->pushMsg(HANDLED_MSG);
+		pBarFly->pushMsg(MSG, "I Lost the fight ...");
+
+		//let Miner  know that the Bar Fly lost to fight
+		Dispatch->DispatchMessage(SEND_MSG_IMMEDIATELY, //time delay
+			pBarFly->ID(),        //ID of sender
+			ent_Miner_Bob,            //ID of recipient
+			Msg_BarFlyLostFight,   //the message
+			NO_ADDITIONAL_INFO);
 
 		pBarFly->GetFSM()->ChangeState(Sleeping::Instance());
+
+
 
 		return true;
 

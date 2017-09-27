@@ -308,8 +308,6 @@ void FightBarFly::Execute(Miner* pMiner)
 		ent_BarFly,            //ID of recipient
 		Msg_MinerFightsBarFly,   //the message
 		NO_ADDITIONAL_INFO);
-
-	pMiner->GetFSM()->RevertToPreviousState();
 }
 
 void FightBarFly::Exit(Miner* pMiner)
@@ -320,6 +318,18 @@ void FightBarFly::Exit(Miner* pMiner)
 
 bool FightBarFly::OnMessage(Miner* pMiner, const Telegram& msg)
 {
+
+	switch (msg.Msg) {
+
+	case Msg_BarFlyLostFight:
+
+		pMiner->pushMsg(HANDLED_MSG);
+		pMiner->GetFSM()->RevertToPreviousState();
+
+		return true;
+
+	}//end switch
+
 	//send msg to global message handler
 	return false;
 }
