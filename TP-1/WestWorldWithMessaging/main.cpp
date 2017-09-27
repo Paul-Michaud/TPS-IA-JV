@@ -93,8 +93,10 @@ int main(){
   cout << "Choice : ";
   cin >> tannonStateNumber;
 
+  bob->GetFSM()->SetPreviousState(EnterMineAndDigForNugget::Instance());
   switch (bobStateNumber) {
   case 1:
+
 	  bob->GetFSM()->SetCurrentState(EnterMineAndDigForNugget::Instance());
 	  break;
   case 2:
@@ -116,6 +118,7 @@ int main(){
 	  bob->GetFSM()->SetCurrentState(EnterMineAndDigForNugget::Instance());
   }
 
+  elsa->GetFSM()->SetPreviousState(DoHouseWork::Instance());
   switch (elsaStateNumber) {
   case 1:
 	  elsa->GetFSM()->SetCurrentState(DoHouseWork::Instance());
@@ -130,6 +133,7 @@ int main(){
 	  elsa->GetFSM()->SetCurrentState(DoHouseWork::Instance());
   }
 
+  tannon->GetFSM()->SetPreviousState(CalmAndDrinking::Instance());
   switch (tannonStateNumber) {
   case 1:
 	  tannon->GetFSM()->SetCurrentState(CalmAndDrinking::Instance());
