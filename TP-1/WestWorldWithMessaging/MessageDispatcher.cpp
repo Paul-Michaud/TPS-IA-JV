@@ -39,7 +39,9 @@ void MessageDispatcher::Discharge(BaseGameEntity* pReceiver,
   if (!pReceiver->HandleMessage(telegram))
   {
     //telegram could not be handled
+	m_mutex->lock();
     cout << "Message not handled";
+	m_mutex->unlock();
   }
 }
 
@@ -55,7 +57,6 @@ void MessageDispatcher::DispatchMessage(double  delay,
                                         int    msg,
                                         void*  ExtraInfo)
 {
-  SetTextColor(BACKGROUND_RED|FOREGROUND_RED|FOREGROUND_GREEN|FOREGROUND_BLUE);
 
   //get pointers to the sender and receiver
   BaseGameEntity* pSender   = EntityMgr->GetEntityFromID(sender);
@@ -64,7 +65,10 @@ void MessageDispatcher::DispatchMessage(double  delay,
   //make sure the receiver is valid
   if (pReceiver == NULL)
   {
+	m_mutex->lock();
+	SetTextColor(BACKGROUND_RED | FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
     cout << "\nWarning! No Receiver with ID of " << receiver << " found";
+	m_mutex->unlock();
 
     return;
   }
@@ -75,9 +79,12 @@ void MessageDispatcher::DispatchMessage(double  delay,
   //if there is no delay, route telegram immediately                       
   if (delay <= 0.0f)                                                        
   {
+	m_mutex->lock();
+	SetTextColor(BACKGROUND_RED | FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
     cout << "\nInstant telegram dispatched at time: " << Clock->GetCurrentTime()
          << " by " << GetNameOfEntity(pSender->ID()) << " for " << GetNameOfEntity(pReceiver->ID()) 
          << ". Msg is "<< MsgToStr(msg);
+	m_mutex->unlock();
 
     //send the telegram to the recipient
     Discharge(pReceiver, telegram);
@@ -93,10 +100,12 @@ void MessageDispatcher::DispatchMessage(double  delay,
     //and put it in the queue
     PriorityQ.insert(telegram);   
 
+	m_mutex->lock();
+	SetTextColor(BACKGROUND_RED | FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
     cout << "\nDelayed telegram from " << GetNameOfEntity(pSender->ID()) << " recorded at time " 
             << Clock->GetCurrentTime() << " for " << GetNameOfEntity(pReceiver->ID())
             << ". Msg is "<< MsgToStr(msg);
-            
+	m_mutex->unlock();
   }
 }
 
@@ -108,7 +117,6 @@ void MessageDispatcher::DispatchMessage(double  delay,
 //------------------------------------------------------------------------
 void MessageDispatcher::DispatchDelayedMessages()
 {
-  SetTextColor(BACKGROUND_RED|FOREGROUND_RED|FOREGROUND_GREEN|FOREGROUND_BLUE);
   
   //get current time
   double CurrentTime = Clock->GetCurrentTime();
@@ -126,8 +134,11 @@ void MessageDispatcher::DispatchDelayedMessages()
     //find the recipient
     BaseGameEntity* pReceiver = EntityMgr->GetEntityFromID(telegram.Receiver);
 
+	m_mutex->lock();
+	SetTextColor(BACKGROUND_RED | FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
     cout << "\nQueued telegram ready for dispatch: Sent to " 
          << GetNameOfEntity(pReceiver->ID()) << ". Msg is " << MsgToStr(telegram.Msg);
+	m_mutex->unlock();
 
     //send the telegram to the recipient
     Discharge(pReceiver, telegram);

@@ -13,6 +13,7 @@
 #pragma warning (disable:4786)
 
 #include <set>
+#include <mutex>
 
 
 #include "misc/ConsoleUtils.h"
@@ -32,6 +33,10 @@ const int   NO_ADDITIONAL_INFO   = 0;
 class MessageDispatcher
 {
 private:  
+
+  //mutex to print safely on console
+  std::mutex* m_mutex;
+
   
   //a std::set is used as the container for the delayed messages
   //because of the benefit of automatic sorting and avoidance
@@ -64,6 +69,8 @@ public:
   //send out any delayed messages. This method is called each time through   
   //the main game loop.
   void DispatchDelayedMessages();
+
+  void setMutex(std::mutex* mutex) { m_mutex = mutex; }
 };
 
 

@@ -56,20 +56,20 @@ private:
 
 public:
 
-  Miner(int id):m_Location(shack),
-                          m_iGoldCarried(0),
-                          m_iMoneyInBank(0),
-                          m_iThirst(0),
-                          m_iFatigue(0),
-                          BaseGameEntity(id)
-                               
-  {
-    //set up state machine
-    m_pStateMachine = new StateMachine<Miner>(this);
-    
-    m_pStateMachine->SetCurrentState(GoHomeAndSleepTilRested::Instance());
+  Miner(int id, std::mutex* mtx_locker):
+	  m_Location(shack),
+      m_iGoldCarried(0),
+      m_iMoneyInBank(0),
+      m_iThirst(0),
+      m_iFatigue(0),
+      BaseGameEntity(id, mtx_locker){
+ 
+		//set up state machine
+		m_pStateMachine = new StateMachine<Miner>(this);
+		m_pStateMachine->SetCurrentState(GoHomeAndSleepTilRested::Instance());
+		/* NOTE, A GLOBAL STATE HAS NOT BEEN IMPLEMENTED FOR THE MINER */
 
-    /* NOTE, A GLOBAL STATE HAS NOT BEEN IMPLEMENTED FOR THE MINER */
+		this->setColorText(FOREGROUND_RED);
   }
 
   ~Miner(){delete m_pStateMachine;}

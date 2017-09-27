@@ -38,17 +38,17 @@ private:
 
 public:
 
-  MinersWife(int id):m_Location(shack),
-                     m_bCooking(false),
-                     BaseGameEntity(id)
-                                        
-  {
-    //set up the state machine
-    m_pStateMachine = new StateMachine<MinersWife>(this);
+  MinersWife(int id, std::mutex* mtx_locker):
+	  m_Location(shack),
+      m_bCooking(false),
+      BaseGameEntity(id, mtx_locker){
 
-    m_pStateMachine->SetCurrentState(DoHouseWork::Instance());
+		//set up the state machine
+		m_pStateMachine = new StateMachine<MinersWife>(this);
+		m_pStateMachine->SetCurrentState(DoHouseWork::Instance());
+		m_pStateMachine->SetGlobalState(WifesGlobalState::Instance());
 
-    m_pStateMachine->SetGlobalState(WifesGlobalState::Instance());
+		this->setColorText(FOREGROUND_GREEN);
   }
 
   ~MinersWife(){delete m_pStateMachine;}

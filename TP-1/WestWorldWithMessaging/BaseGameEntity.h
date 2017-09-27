@@ -10,8 +10,17 @@
 //
 //------------------------------------------------------------------------
 #include <string>
+#include <mutex>
+#include <queue>
+#include <vector>
 
+#include "EntityNames.h"
 #include "messaging/Telegram.h"
+#include "misc/consoleutils.h"
+#include "Time/CrudeTimer.h"
+
+#define MSG 0
+#define HANDLED_MSG 1
 
 
 class BaseGameEntity
@@ -26,6 +35,14 @@ private:
   //this value is updated
   static int  m_iNextValidID;
 
+  //Every entity has a color to print output
+  int colorText = FOREGROUND_RED;
+
+  //Queue to store messages types (Msg or HandledMsg)
+  std::queue<int> m_msgTypeQueue;
+  //Queue to store messages
+  std::queue<std::string> m_msgQueue;
+
   //this must be called within the constructor to make sure the ID is set
   //correctly. It verifies that the value passed to the method is greater
   //or equal to the next valid ID, before setting the ID and incrementing
@@ -34,9 +51,12 @@ private:
 
 public:
 
-  BaseGameEntity(int id)
-  {
+  //mutex for thread safe for print on console
+  std::mutex* m_mutex;
+
+  BaseGameEntity(int id, std::mutex* mutex){
     SetID(id);
+	m_mutex = mutex;
   }
 
   virtual ~BaseGameEntity(){}
@@ -48,10 +68,21 @@ public:
   //using the MessageDispatcher singleton class
   virtual bool  HandleMessage(const Telegram& msg)=0;
 
-  int           ID()const{return m_ID;}  
+  int           ID()const{return m_ID;}
+
+  //Print message
+  /*void printMsg(std::string msg);
+  void printHandledMsg();*/
+
+  //Push a message
+  void pushMsg(int msg_type, std::string msg = "");
+  //Print queued message(s)
+  void printQueuedMsg();
+
+  //text color
+  void setColorText(int colorText) { this->colorText = colorText; }
+
 };
-
-
 
 #endif
 

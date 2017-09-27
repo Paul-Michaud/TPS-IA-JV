@@ -49,17 +49,17 @@ private:
 
 public:
 
-	BarFly(int id) :m_Location(saloon),
+	BarFly(int id, std::mutex* mtx_locker):
+		m_Location(saloon),
 		m_iDrinks(0),
 		m_iFatigue(0),
-		BaseGameEntity(id)
+		BaseGameEntity(id, mtx_locker){
 
-	{
 		//set up state machine
 		m_pStateMachine = new StateMachine<BarFly>(this);
-
 		m_pStateMachine->SetCurrentState(CalmAndDrinking::Instance());
 
+		this->setColorText(FOREGROUND_GREEN | FOREGROUND_BLUE);
 	}
 
 	~BarFly() { delete m_pStateMachine; }
