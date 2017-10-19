@@ -1,5 +1,9 @@
 #include "AgentLeaderHumain.h"
 #include "SteeringBehaviors.h"
+// A SUPPR// A SUPPR// A SUPPR// A SUPPR
+#include <iostream>
+using namespace std;
+// A SUPPR// A SUPPR// A SUPPR// A SUPPR
 
 AgentLeaderHumain::AgentLeaderHumain(GameWorld* world,
 		Vector2D position,
@@ -27,11 +31,15 @@ AgentLeaderHumain::AgentLeaderHumain(GameWorld* world,
 }
 
 void AgentLeaderHumain::turnLeft() {
-
+	double velocityX = this->m_vVelocity.x;
+	double velocityY = this->m_vVelocity.y;
+	
+	this->SetVelocity(Vector2D(0,0));
+	
 }
 
 void AgentLeaderHumain::turnRight() {
-
+	this->SetVelocity(Vector2D(100, 0));
 }
 
 void AgentLeaderHumain::accelerate() {
@@ -41,5 +49,6 @@ void AgentLeaderHumain::accelerate() {
 void AgentLeaderHumain::decelerate() {
 
 }
+
 AgentLeaderHumain::~AgentLeaderHumain(){
 }

@@ -12,6 +12,11 @@
 #include "resource.h"
 #include "misc/WindowUtils.h"
 
+// A SUPPR// A SUPPR// A SUPPR// A SUPPR
+#include <iostream>
+using namespace std;
+// A SUPPR// A SUPPR// A SUPPR// A SUPPR
+
 //--------------------------------- Globals ------------------------------
 //
 //------------------------------------------------------------------------
@@ -124,8 +129,7 @@ LRESULT CALLBACK WindowProc (HWND   hwnd,
            
                g_GameWorld = new GameWorld(cxClient, cyClient);
             }
-
-            break;
+          break;
            
 
         }//end switch

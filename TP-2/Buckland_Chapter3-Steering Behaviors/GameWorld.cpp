@@ -25,6 +25,8 @@ using namespace std;
 #include <list>
 using std::list;
 
+//GLOBAL VARIABLE FOR THE HUMAN LEADER
+AgentLeaderHumain* m_pAgentLeaderHumain;
 
 //------------------------------- ctor -----------------------------------
 //------------------------------------------------------------------------
@@ -47,6 +49,7 @@ GameWorld::GameWorld(int cx, int cy):
             m_bRenderNeighbors(false),
             m_bViewKeys(false),
             m_bShowCellSpaceInfo(false)
+
 {
 
   //setup the spatial subdivision class
@@ -64,7 +67,7 @@ GameWorld::GameWorld(int cx, int cy):
   /*
   Vector2D SpawnPos = Vector2D(cx / 2.0 + RandomClamped()*cx / 2.0, cy / 2.0 + RandomClamped()*cy / 2.0);
 
-  Vehicle* pVehicle = new AgentLeader(this,
+  AgentLeader* pAgentLeader = new AgentLeader(this,
 	  SpawnPos,                 //initial position
 	  RandFloat()*TwoPi,        //start rotation
 	  Vector2D(0, 0),            //velocity
@@ -75,10 +78,10 @@ GameWorld::GameWorld(int cx, int cy):
 	  Prm.VehicleScale);        //scale
 
 								//pVehicle->Steering()->FlockingOn();
-  m_Vehicles.push_back(pVehicle);
+  m_Vehicles.push_back(pAgentLeader);
 
   //add it to the cell subdivision
-  m_pCellSpace->AddEntity(pVehicle);
+  m_pCellSpace->AddEntity(pAgentLeader);
   */
   /* .......................................................
 
@@ -93,7 +96,7 @@ GameWorld::GameWorld(int cx, int cy):
     //determine a random starting position
     SpawnPos = Vector2D(cx/2.0+RandomClamped()*cx/2.0, cy/2.0+RandomClamped()*cy/2.0);
 
-    Vehicle* pVehicle = new AgentPoursuiveur(this,
+    AgentPoursuiveur* pAgentPoursuiveur = new AgentPoursuiveur(this,
                                     SpawnPos,                 //initial position
                                     RandFloat()*TwoPi,        //start rotation
                                     Vector2D(0,0),            //velocity
@@ -105,12 +108,13 @@ GameWorld::GameWorld(int cx, int cy):
 									m_Vehicles[a-1]);       
 
     //pVehicle->Steering()->FlockingOn();
-    m_Vehicles.push_back(pVehicle);
+    m_Vehicles.push_back(pAgentPoursuiveur);
 
     //add it to the cell subdivision
-    m_pCellSpace->AddEntity(pVehicle);
+    m_pCellSpace->AddEntity(pAgentPoursuiveur);
   }
   */
+
   /* .......................................................
 
   SETUP THE HUMAN LEADER
@@ -118,7 +122,7 @@ GameWorld::GameWorld(int cx, int cy):
   .......................................................*/
   Vector2D SpawnPosHuman = Vector2D(cx / 2.0, cy / 2.0);
 
-  Vehicle* pAgentLeaderHumain = new AgentLeaderHumain(this,
+  AgentLeaderHumain* pAgentLeaderHumain = new AgentLeaderHumain(this,
 	  SpawnPosHuman,                 //initial position
 	  RandFloat()*TwoPi,        //start rotation
 	  Vector2D(0, 0),            //velocity
@@ -128,13 +132,15 @@ GameWorld::GameWorld(int cx, int cy):
 	  Prm.MaxTurnRatePerSecond, //max turn rate
 	  Prm.VehicleScale);        //scale
 
+  //init the glob variable to access it everywhere
+  m_pAgentLeaderHumain = pAgentLeaderHumain;
+
   m_Vehicles.push_back(pAgentLeaderHumain);
 
   //add it to the cell subdivision
   m_pCellSpace->AddEntity(pAgentLeaderHumain);
 
 }
-
 
 //-------------------------------- dtor ----------------------------------
 //------------------------------------------------------------------------
@@ -347,6 +353,24 @@ void GameWorld::HandleKeyPresses(WPARAM wParam)
           }
         }
         break;
+
+	case 38: //up arrow
+		{
+		m_pAgentLeaderHumain->accelerate();
+		}
+	break;
+
+	case 37: //left arrow
+		{
+		m_pAgentLeaderHumain->turnLeft();
+		}
+	break;
+
+	case 39: //right arrow
+		{
+		m_pAgentLeaderHumain->turnRight();
+		}
+	break;
 
   }//end switch
 }
