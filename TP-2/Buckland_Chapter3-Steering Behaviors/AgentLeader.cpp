@@ -24,13 +24,10 @@ AgentLeader::AgentLeader(GameWorld* world,
 		max_speed,
 		max_turn_rate,
 		scale)
-
-
 {
 	this->Steering()->WanderOn();
 	this->SetScale(Vector2D(10,10));
 	this->SetMaxSpeed(70);
-
 }
 
 

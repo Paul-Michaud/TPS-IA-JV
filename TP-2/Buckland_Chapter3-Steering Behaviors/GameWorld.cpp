@@ -21,6 +21,7 @@ using namespace std;
 
 #include "AgentLeader.h"
 #include "AgentPoursuiveur.h"
+#include "AgentLeaderHumain.h"
 #include <list>
 using std::list;
 
@@ -53,13 +54,14 @@ GameWorld::GameWorld(int cx, int cy):
 
   double border = 30;
   m_pPath = new Path(5, border, border, cx-border, cy-border, true); 
-
-
+  
+  
   /* .......................................................
 
   SETUP THE LEADER
 
   .......................................................*/
+  /*
   Vector2D SpawnPos = Vector2D(cx / 2.0 + RandomClamped()*cx / 2.0, cy / 2.0 + RandomClamped()*cy / 2.0);
 
   Vehicle* pVehicle = new AgentLeader(this,
@@ -77,18 +79,19 @@ GameWorld::GameWorld(int cx, int cy):
 
   //add it to the cell subdivision
   m_pCellSpace->AddEntity(pVehicle);
-
+  */
   /* .......................................................
 
   SETUP THE PURSUERS AGENTS
 
   .......................................................*/
+  /*
   //Start at one because 0 is the leader
   for (int a=1; a<Prm.NumAgents; ++a)
   {
 
     //determine a random starting position
-    Vector2D SpawnPos = Vector2D(cx/2.0+RandomClamped()*cx/2.0, cy/2.0+RandomClamped()*cy/2.0);
+    SpawnPos = Vector2D(cx/2.0+RandomClamped()*cx/2.0, cy/2.0+RandomClamped()*cy/2.0);
 
     Vehicle* pVehicle = new AgentPoursuiveur(this,
                                     SpawnPos,                 //initial position
@@ -107,6 +110,28 @@ GameWorld::GameWorld(int cx, int cy):
     //add it to the cell subdivision
     m_pCellSpace->AddEntity(pVehicle);
   }
+  */
+  /* .......................................................
+
+  SETUP THE HUMAN LEADER
+
+  .......................................................*/
+  Vector2D SpawnPosHuman = Vector2D(cx / 2.0, cy / 2.0);
+
+  Vehicle* pAgentLeaderHumain = new AgentLeaderHumain(this,
+	  SpawnPosHuman,                 //initial position
+	  RandFloat()*TwoPi,        //start rotation
+	  Vector2D(0, 0),            //velocity
+	  Prm.VehicleMass,          //mass
+	  Prm.MaxSteeringForce,     //max force
+	  Prm.MaxSpeed,             //max velocity
+	  Prm.MaxTurnRatePerSecond, //max turn rate
+	  Prm.VehicleScale);        //scale
+
+  m_Vehicles.push_back(pAgentLeaderHumain);
+
+  //add it to the cell subdivision
+  m_pCellSpace->AddEntity(pAgentLeaderHumain);
 
 }
 
