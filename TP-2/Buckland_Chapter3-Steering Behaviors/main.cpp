@@ -83,7 +83,9 @@ LRESULT CALLBACK WindowProc (HWND   hwnd,
          
          g_GameWorld = new GameWorld(cxClient, cyClient);
 
-         ChangeMenuState(hwnd, IDR_PRIORITIZED, MFS_CHECKED);
+		 //Set the calculate method "weighted sum" by default
+         //ChangeMenuState(hwnd, IDR_PRIORITIZED, MFS_CHECKED);
+		 g_GameWorld->HandleMenuItems(IDR_WEIGHTED_SUM, hwnd);
          ChangeMenuState(hwnd, ID_VIEW_FPS, MFS_CHECKED);
          
       }
