@@ -210,6 +210,7 @@ QuenchThirst* QuenchThirst::Instance()
 
 void QuenchThirst::Enter(Miner* pMiner)
 {
+  
   if (pMiner->Location() != saloon)
   {    
 	pMiner->pushMsg(MSG, "Boy, ah sure is thusty! Walking to the saloon");

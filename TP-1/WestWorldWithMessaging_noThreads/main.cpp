@@ -119,7 +119,14 @@ int main()
   //run Bob and Elsa through a few Update calls
   for (int i=0; i<30; ++i)
   { 
-    Bob->Update();
+
+	//Display loop number
+	SetTextColor(FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
+	std::cout << "\n------------------------------------";
+	std::cout << "\n    Loop " << i + 1;
+	std::cout << "\n------------------------------------";
+    
+	Bob->Update();
     Elsa->Update();
 	Tannon->Update();
 

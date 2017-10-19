@@ -75,6 +75,8 @@ FightMinerBob* FightMinerBob::Instance()
 
 void FightMinerBob::Enter(BarFly* pBarFly)
 {
+	// If he enters this state at the beginning we set his number of drinks
+	pBarFly->SetDrinks(3);
 	pBarFly->pushMsg(MSG, "Grumph where is the fukin' miner ?!");
 }
 
