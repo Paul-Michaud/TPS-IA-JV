@@ -15,7 +15,8 @@ AgentPoursuiveur::AgentPoursuiveur(GameWorld* world,
 	double    max_speed,
 	double    max_turn_rate,
 	double    scale,
-	Vehicle* leaderLocal) : Vehicle(
+	Vehicle* leaderLocal,
+	Vector2D pursuerOffset) : Vehicle(
 		world,
 		position,
 		rotation,
@@ -25,12 +26,13 @@ AgentPoursuiveur::AgentPoursuiveur(GameWorld* world,
 		max_speed,
 		max_turn_rate,
 		scale)
-	
 {
-	Vector2D PoursuiveurOffset((double)-5, (double)0);
-	this->Steering()->OffsetPursuitOn(leaderLocal, PoursuiveurOffset);
+
+	this->Steering()->OffsetPursuitOn(leaderLocal, pursuerOffset);
 	this->Steering()->SeparationOn();
+	this->Steering()->FlockingOn();
 }
+
 
 
 AgentPoursuiveur::~AgentPoursuiveur() {

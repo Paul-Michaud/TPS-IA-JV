@@ -1,9 +1,5 @@
 #include "AgentLeaderHumain.h"
 #include "SteeringBehaviors.h"
-// A SUPPR// A SUPPR// A SUPPR// A SUPPR
-#include <iostream>
-using namespace std;
-// A SUPPR// A SUPPR// A SUPPR// A SUPPR
 
 AgentLeaderHumain::AgentLeaderHumain(GameWorld* world,
 		Vector2D position,
@@ -25,30 +21,30 @@ AgentLeaderHumain::AgentLeaderHumain(GameWorld* world,
 			scale)
 {
 	this->Steering()->WanderOff();
-	//this->SetVelocity(Vector2D(0, max_speed));
-	
-	
 }
 
 void AgentLeaderHumain::turnLeft() {
-	double velocityX = this->m_vVelocity.x;
-	double velocityY = this->m_vVelocity.y;
-	
-	this->SetVelocity(Vector2D(0,0));
-	
+	if (this->m_vVelocity != Vector2D(0,0)) // Turn only if we are in movement
+		this->SetVelocity(this->m_vVelocity - this->Side() * this->MaxTurnRate());
+
 }
 
 void AgentLeaderHumain::turnRight() {
-	this->SetVelocity(Vector2D(100, 0));
+	if (this->m_vVelocity != Vector2D(0, 0)) // Turn only if we are in movement
+		this->SetVelocity(this->m_vVelocity + this->Side() * this->MaxTurnRate());
 }
 
 void AgentLeaderHumain::accelerate() {
-
+	if (this->m_vVelocity.y < this->MaxSpeed()) //Accelerate to maximum speed
+		this->SetVelocity(this->m_vVelocity + this->Heading() * this->MaxSpeed()/15.0);
 }
 
 void AgentLeaderHumain::decelerate() {
-
+		if(this->m_vVelocity.Length() > this->Heading().Length() * this->MaxSpeed() / 15.0)
+			this->SetVelocity(this->m_vVelocity - this->Heading() * this->MaxSpeed() / 15.0);
+		else this->SetVelocity(Vector2D(0, 0));
 }
+
 
 AgentLeaderHumain::~AgentLeaderHumain(){
 }

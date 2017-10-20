@@ -1,7 +1,6 @@
 #include "AgentLeader.h"
 #include "SteeringBehaviors.h"
 
-
 //------------------------------ ctor ----------------------------------
 //
 //------------------------------------------------------------------------
@@ -29,8 +28,6 @@ AgentLeader::AgentLeader(GameWorld* world,
 	this->SetScale(Vector2D(10,10));
 	this->SetMaxSpeed(70);
 }
-
-
 
 AgentLeader::~AgentLeader() {
 }

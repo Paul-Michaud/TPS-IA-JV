@@ -2,6 +2,7 @@
 #define AGENTLEADERHUMAIN_H
 #pragma warning (disable:4786)
 #include "AgentLeader.h"
+
 class AgentLeaderHumain : public AgentLeader
 {
 public:
@@ -14,10 +15,13 @@ public:
 		double max_speed,
 		double max_turn_rate,
 		double scale);
+
+	//Moving functions
 	void turnRight();
 	void turnLeft();
 	void accelerate();
 	void decelerate();
+
 	~AgentLeaderHumain();
 };
 

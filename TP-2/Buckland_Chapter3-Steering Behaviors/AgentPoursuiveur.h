@@ -12,7 +12,6 @@
 //------------------------------------------------------------------------
 #include "vehicle.h"
 
-
 class AgentPoursuiveur : public Vehicle
 {
 public :
@@ -25,7 +24,8 @@ public :
 		double    max_speed,
 		double    max_turn_rate,
 		double    scale,
-		Vehicle*	  leaderLocal);
+		Vehicle*  leaderLocal,
+		Vector2D pursuerOffset);
 
 	~AgentPoursuiveur();
 
