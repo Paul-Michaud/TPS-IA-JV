@@ -18,6 +18,16 @@
 #include <list>
 #include <string>
 
+// A SUPPR// A SUPPR// A SUPPR// A SUPPR
+#include <iostream>
+using namespace std;
+// A SUPPR// A SUPPR// A SUPPR// A SUPPR
+
+#define VEHICULE 0
+#define AGENTLEADER 1
+#define AGENTPOURSUIVEUR 2
+#define AGENTLEADERHUMAIN 3
+
 class GameWorld;
 class SteeringBehavior;
 
@@ -52,6 +62,9 @@ private:
   //steering behaviors make use of this - see Wander)
   double                m_dTimeElapsed;
 
+  //used to get the type of the vehicule
+  int					m_iVehiculeType;
+
 
   //buffer for the vehicle shape
   std::vector<Vector2D> m_vecVehicleVB;
@@ -66,15 +79,16 @@ private:
 
 public:
 
-  Vehicle(GameWorld* world,
-         Vector2D position,
-         double    rotation,
-         Vector2D velocity,
-         double    mass,
-         double    max_force,
-         double    max_speed,
-         double    max_turn_rate,
-         double    scale);
+	Vehicle(GameWorld* world,
+		Vector2D position,
+		double    rotation,
+		Vector2D velocity,
+		double    mass,
+		double    max_force,
+		double    max_speed,
+		double    max_turn_rate,
+		double    scale,
+		int vehicule_type);
 
   ~Vehicle();
 

@@ -75,7 +75,8 @@ GameWorld::GameWorld(int cx, int cy):
 	  Prm.MaxSteeringForce,     //max force
 	  Prm.MaxSpeed,             //max velocity
 	  Prm.MaxTurnRatePerSecond, //max turn rate
-	  Prm.VehicleScale);        //scale
+	  Prm.VehicleScale,
+	  AGENTLEADER);        //scale
 
 								//pVehicle->Steering()->FlockingOn();
   m_Vehicles.push_back(pAgentLeader);
@@ -106,7 +107,8 @@ GameWorld::GameWorld(int cx, int cy):
                                     Prm.MaxTurnRatePerSecond, //max turn rate
                                     Prm.VehicleScale,		  //scale
 									m_Vehicles.back(),
-									Vector2D((double)-5, (double)0));
+									Vector2D((double)-5, (double)0),
+									AGENTPOURSUIVEUR);
 
     //pVehicle->Steering()->FlockingOn();
     m_Vehicles.push_back(pAgentPoursuiveur);
@@ -130,7 +132,8 @@ GameWorld::GameWorld(int cx, int cy):
 	  Prm.MaxSteeringForce,     //max force
 	  Prm.MaxSpeed,             //max velocity
 	  Prm.MaxTurnRatePerSecond, //max turn rate
-	  Prm.VehicleScale);        //scale
+	  Prm.VehicleScale,         //scale
+	  AGENTLEADERHUMAIN);       
 
   //init the glob variable to access it everywhere
   m_pAgentLeaderHumain = pAgentLeaderHumain;
@@ -173,7 +176,8 @@ GameWorld::GameWorld(int cx, int cy):
 		  Prm.MaxTurnRatePerSecond, //max turn rate
 		  Prm.VehicleScale,		  //scale
 		  leader,
-		  pursuerOffset);
+		  pursuerOffset,
+		  AGENTPOURSUIVEUR);
 
 	  //pVehicle->Steering()->FlockingOn();
 	  m_Vehicles.push_back(pAgentPoursuiveur);

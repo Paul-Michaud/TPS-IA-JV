@@ -6,14 +6,15 @@
 //------------------------------------------------------------------------
 
 AgentLeader::AgentLeader(GameWorld* world,
-	Vector2D position,
+	Vector2D  position,
 	double    rotation,
-	Vector2D velocity,
+	Vector2D  velocity,
 	double    mass,
 	double    max_force,
 	double    max_speed,
 	double    max_turn_rate,
-	double    scale) : Vehicle (
+	double    scale,
+	int		  vehicule_type) : Vehicle (
 		world,
 		position,
 		rotation,
@@ -22,7 +23,8 @@ AgentLeader::AgentLeader(GameWorld* world,
 		max_force,
 		max_speed,
 		max_turn_rate,
-		scale)
+		scale,
+		vehicule_type)
 {
 	this->Steering()->WanderOn();
 	this->SetScale(Vector2D(10,10));

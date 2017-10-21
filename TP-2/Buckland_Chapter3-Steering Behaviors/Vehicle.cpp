@@ -21,7 +21,8 @@ Vehicle::Vehicle(GameWorld* world,
                double    max_force,
                double    max_speed,
                double    max_turn_rate,
-               double    scale):    MovingEntity(position,
+               double    scale,
+			   int vehicule_type):    MovingEntity(position,
                                                  scale,
                                                  velocity,
                                                  max_speed,
@@ -34,7 +35,8 @@ Vehicle::Vehicle(GameWorld* world,
                                        m_pWorld(world),
                                        m_vSmoothedHeading(Vector2D(0,0)),
                                        m_bSmoothingOn(false),
-                                       m_dTimeElapsed(0.0)
+                                       m_dTimeElapsed(0.0),
+									   m_iVehiculeType(vehicule_type)
 {  
   InitializeBuffer();
 
@@ -131,7 +133,10 @@ void Vehicle::Render()
 
   else
   {
-    gdi->BluePen();
+	  if (this->m_iVehiculeType == AGENTLEADERHUMAIN) gdi->GreenPen();
+	  else if (this->m_iVehiculeType == AGENTPOURSUIVEUR) gdi->BluePen();
+	  else if (this->m_iVehiculeType == AGENTLEADER) gdi->RedPen();
+	  else gdi->BlackPen();
   }
 
   if (Steering()->isInterposeOn())

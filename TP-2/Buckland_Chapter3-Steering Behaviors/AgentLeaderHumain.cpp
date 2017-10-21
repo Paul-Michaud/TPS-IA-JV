@@ -1,5 +1,6 @@
 #include "AgentLeaderHumain.h"
 #include "SteeringBehaviors.h"
+#include "misc/cgdi.h"
 
 AgentLeaderHumain::AgentLeaderHumain(GameWorld* world,
 		Vector2D position,
@@ -9,7 +10,8 @@ AgentLeaderHumain::AgentLeaderHumain(GameWorld* world,
 		double    max_force,
 		double    max_speed,
 		double    max_turn_rate,
-		double    scale) : AgentLeader(
+		double    scale,
+		int		  vehicule_type) : AgentLeader(
 			world,
 			position,
 			rotation,
@@ -18,7 +20,8 @@ AgentLeaderHumain::AgentLeaderHumain(GameWorld* world,
 			max_force,
 			max_speed,
 			max_turn_rate,
-			scale)
+			scale,
+			vehicule_type)
 {
 	this->Steering()->WanderOff();
 }
@@ -44,7 +47,6 @@ void AgentLeaderHumain::decelerate() {
 			this->SetVelocity(this->m_vVelocity - this->Heading() * this->MaxSpeed() / 15.0);
 		else this->SetVelocity(Vector2D(0, 0));
 }
-
 
 AgentLeaderHumain::~AgentLeaderHumain(){
 }

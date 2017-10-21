@@ -25,7 +25,8 @@ public :
 		double    max_turn_rate,
 		double    scale,
 		Vehicle*  leaderLocal,
-		Vector2D pursuerOffset);
+		Vector2D pursuerOffset,
+		int vehicule_type);
 
 	~AgentPoursuiveur();
 
