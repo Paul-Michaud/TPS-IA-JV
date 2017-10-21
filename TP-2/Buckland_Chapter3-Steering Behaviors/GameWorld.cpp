@@ -122,6 +122,8 @@ GameWorld::GameWorld(int cx, int cy):
   SETUP THE HUMAN LEADER
 
   .......................................................*/
+
+ 
   Vector2D SpawnPosHuman = Vector2D(cx / 2.0, cy / 2.0);
 
   AgentLeaderHumain* pAgentLeaderHumain = new AgentLeaderHumain(this,
@@ -623,7 +625,13 @@ void GameWorld::HandleMenuItems(WPARAM wParam, HWND hwnd)
       }
 
       break;
-      
+
+	  case ID_HUMAN_LEADER: 
+	  {
+
+	  }
+
+	  break;
   }//end switch
 }
 

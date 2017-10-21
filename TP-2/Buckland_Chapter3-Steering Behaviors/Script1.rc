@@ -53,6 +53,10 @@ BEGIN
     BEGIN
         MENUITEM "On/Off",                      ID_MENU_SMOOTHING
     END
+    POPUP "Game controls"
+    BEGIN
+	MENUITEM "Human Leader On/Off",         ID_HUMAN_LEADER
+    END
 END
 
 
