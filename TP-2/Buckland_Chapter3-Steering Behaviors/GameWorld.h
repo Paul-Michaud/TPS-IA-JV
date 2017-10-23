@@ -21,6 +21,7 @@
 #include "BaseGameEntity.h"
 #include "EntityFunctionTemplates.h"
 #include "vehicle.h"
+#include "AgentLeaderHumain.h"
 
 
 class Obstacle;
@@ -59,9 +60,11 @@ private:
   Vector2D                      m_vCrosshair;
 
   //keeps track of the average FPS
-  double                         m_dAvFrameTime;
+  double                        m_dAvFrameTime;
 
-
+  //Pointer to our human leader
+  AgentLeaderHumain*			m_pAgentLeaderHumain;
+  
   //flags to turn aids and obstacles etc on/off
   bool  m_bShowWalls;
   bool  m_bShowObstacles;
@@ -74,6 +77,7 @@ private:
   bool  m_bRenderNeighbors;
   bool  m_bViewKeys;
   bool  m_bShowCellSpaceInfo;
+  bool  m_bAgentLeaderHumain;
 
 
   void CreateObstacles();

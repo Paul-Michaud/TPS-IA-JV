@@ -18,11 +18,6 @@
 #include <list>
 #include <string>
 
-// A SUPPR// A SUPPR// A SUPPR// A SUPPR
-#include <iostream>
-using namespace std;
-// A SUPPR// A SUPPR// A SUPPR// A SUPPR
-
 #define VEHICULE 0
 #define AGENTLEADER 1
 #define AGENTPOURSUIVEUR 2

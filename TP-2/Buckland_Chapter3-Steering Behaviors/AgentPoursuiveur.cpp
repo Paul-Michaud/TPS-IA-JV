@@ -1,6 +1,10 @@
 #include "AgentPoursuiveur.h"
 #include "SteeringBehaviors.h"
 
+// A SUPPR// A SUPPR// A SUPPR// A SUPPR
+#include <iostream>
+using namespace std;
+// A SUPPR// A SUPPR// A SUPPR// A SUPPR
 
 //------------------------------ ctor ----------------------------------
 //
@@ -33,6 +37,7 @@ AgentPoursuiveur::AgentPoursuiveur(GameWorld* world,
 	this->Steering()->OffsetPursuitOn(leaderLocal, pursuerOffset);
 	this->Steering()->SeparationOn();
 	this->Steering()->FlockingOn();
+
 }
 
 

@@ -14,19 +14,19 @@
 
 
 #include "resource.h"
+
+
+#include "AgentLeader.h"
+#include "AgentPoursuiveur.h"
+
+#include <list>
+using std::list;
+
 // A SUPPR// A SUPPR// A SUPPR// A SUPPR
 #include <iostream>
 using namespace std;
 // A SUPPR// A SUPPR// A SUPPR// A SUPPR
 
-#include "AgentLeader.h"
-#include "AgentPoursuiveur.h"
-#include "AgentLeaderHumain.h"
-#include <list>
-using std::list;
-
-//GLOBAL VARIABLE FOR THE HUMAN LEADER
-AgentLeaderHumain* m_pAgentLeaderHumain;
 
 //------------------------------- ctor -----------------------------------
 //------------------------------------------------------------------------
@@ -48,7 +48,8 @@ GameWorld::GameWorld(int cx, int cy):
             m_pPath(NULL),
             m_bRenderNeighbors(false),
             m_bViewKeys(false),
-            m_bShowCellSpaceInfo(false)
+            m_bShowCellSpaceInfo(false),
+			m_bAgentLeaderHumain(false)
 
 {
 
@@ -90,104 +91,37 @@ GameWorld::GameWorld(int cx, int cy):
 
   .......................................................*/
 
-  //Start at one because 0 is the leader
-  for (int a=0; a<Prm.NumAgents; ++a)
-  {
+  ////Start at one because 0 is the leader
+  //for (int a=0; a<Prm.NumAgents; ++a)
+  //{
 
-    //determine a random starting position
-    SpawnPos = Vector2D(cx/2.0+RandomClamped()*cx/2.0, cy/2.0+RandomClamped()*cy/2.0);
+  //  //determine a random starting position
+  //  SpawnPos = Vector2D(cx/2.0+RandomClamped()*cx/2.0, cy/2.0+RandomClamped()*cy/2.0);
 
-    AgentPoursuiveur* pAgentPoursuiveur = new AgentPoursuiveur(this,
-                                    SpawnPos,                 //initial position
-                                    RandFloat()*TwoPi,        //start rotation
-                                    Vector2D(0,0),            //velocity
-                                    Prm.VehicleMass,          //mass
-                                    Prm.MaxSteeringForce,     //max force
-                                    Prm.MaxSpeed,             //max velocity
-                                    Prm.MaxTurnRatePerSecond, //max turn rate
-                                    Prm.VehicleScale,		  //scale
-									m_Vehicles.back(),
-									Vector2D((double)-5, (double)0),
-									AGENTPOURSUIVEUR);
+  //  AgentPoursuiveur* pAgentPoursuiveur = new AgentPoursuiveur(this,
+  //                                  SpawnPos,                 //initial position
+  //                                  RandFloat()*TwoPi,        //start rotation
+  //                                  Vector2D(0,0),            //velocity
+  //                                  Prm.VehicleMass,          //mass
+  //                                  Prm.MaxSteeringForce,     //max force
+  //                                  Prm.MaxSpeed,             //max velocity
+  //                                  Prm.MaxTurnRatePerSecond, //max turn rate
+  //                                  Prm.VehicleScale,		  //scale
+		//							m_Vehicles.back(),
+		//							Vector2D((double)-5, (double)0),
+		//							AGENTPOURSUIVEUR);
 
-    //pVehicle->Steering()->FlockingOn();
-    m_Vehicles.push_back(pAgentPoursuiveur);
+  //  //pVehicle->Steering()->FlockingOn();
+  //  m_Vehicles.push_back(pAgentPoursuiveur);
 
-    //add it to the cell subdivision
-    m_pCellSpace->AddEntity(pAgentPoursuiveur);
-  }
-
-  /* .......................................................
-
-  SETUP THE HUMAN LEADER
-
-  .......................................................*/
+  //  //add it to the cell subdivision
+  //  m_pCellSpace->AddEntity(pAgentPoursuiveur);
+  //}
 
  
-  Vector2D SpawnPosHuman = Vector2D(cx / 2.0, cy / 2.0);
-
-  AgentLeaderHumain* pAgentLeaderHumain = new AgentLeaderHumain(this,
-	  SpawnPosHuman,                 //initial position
-	  RandFloat()*TwoPi,        //start rotation
-	  Vector2D(0, 0),            //velocity
-	  Prm.VehicleMass,          //mass
-	  Prm.MaxSteeringForce,     //max force
-	  Prm.MaxSpeed,             //max velocity
-	  Prm.MaxTurnRatePerSecond, //max turn rate
-	  Prm.VehicleScale,         //scale
-	  AGENTLEADERHUMAIN);       
-
-  //init the glob variable to access it everywhere
-  m_pAgentLeaderHumain = pAgentLeaderHumain;
-
-  m_Vehicles.push_back(pAgentLeaderHumain);
-
-  //add it to the cell subdivision
-  m_pCellSpace->AddEntity(pAgentLeaderHumain);
 
 
-  /* .......................................................
-
-  SETUP THE PURSUERS AGENTS IN V PATTERN
-
-  .......................................................*/
-
-  //Start at one because 0 is the leader
-  for (int a = 0; a<Prm.NumAgents/2; ++a)
-  {
-
-	  //determine a random starting position
-	  SpawnPos = Vector2D(cx / 2.0 + RandomClamped()*cx / 2.0, cy / 2.0 + RandomClamped()*cy / 2.0);
-
-	  Vehicle* leader;
-	  Vector2D pursuerOffset;
-
-	  if (a == 0 || a == 1) leader = pAgentLeaderHumain;
-	  else leader = m_Vehicles.at(m_Vehicles.size() - 2);
-
-	  if (a % 2 == 0) pursuerOffset = Vector2D((double)0, (double)-10);
-	  else pursuerOffset = Vector2D((double)0, (double)10);
-
-	  AgentPoursuiveur* pAgentPoursuiveur = new AgentPoursuiveur(this,
-		  SpawnPos,                 //initial position
-		  RandFloat()*TwoPi,        //start rotation
-		  Vector2D(0, 0),            //velocity
-		  Prm.VehicleMass,          //mass
-		  Prm.MaxSteeringForce,     //max force
-		  Prm.MaxSpeed,             //max velocity
-		  Prm.MaxTurnRatePerSecond, //max turn rate
-		  Prm.VehicleScale,		  //scale
-		  leader,
-		  pursuerOffset,
-		  AGENTPOURSUIVEUR);
-
-	  //pVehicle->Steering()->FlockingOn();
-	  m_Vehicles.push_back(pAgentPoursuiveur);
-
-	  //add it to the cell subdivision
-	  m_pCellSpace->AddEntity(pAgentPoursuiveur);
-  }
-
+ 
 
 }
 
@@ -626,9 +560,85 @@ void GameWorld::HandleMenuItems(WPARAM wParam, HWND hwnd)
 
       break;
 
-	  case ID_HUMAN_LEADER: 
+	  case ID_AGENT_LEADER_HUMAIN: 
 	  {
+		  if (!m_bAgentLeaderHumain) {
+			  /* .......................................................
 
+			  SETUP THE HUMAN LEADER
+
+			  .......................................................*/
+
+			  Vector2D SpawnPosHuman = Vector2D(m_cxClient / 2.0, m_cyClient / 2.0);
+
+			  m_pAgentLeaderHumain = new AgentLeaderHumain(this,
+				  SpawnPosHuman,                 //initial position
+				  RandFloat()*TwoPi,        //start rotation
+				  Vector2D(0, 0),            //velocity
+				  Prm.VehicleMass,          //mass
+				  Prm.MaxSteeringForce,     //max force
+				  Prm.MaxSpeed,             //max velocity
+				  Prm.MaxTurnRatePerSecond, //max turn rate
+				  Prm.VehicleScale,         //scale
+				  AGENTLEADERHUMAIN);
+
+			  m_Vehicles.push_back(m_pAgentLeaderHumain);
+			  //add it to the cell subdivision
+			  m_pCellSpace->AddEntity(m_pAgentLeaderHumain);
+			  m_bAgentLeaderHumain = true;
+
+			  /* .......................................................
+
+			  SETUP THE PURSUERS AGENTS IN V PATTERN
+
+			  .......................................................*/
+
+			  //Start at one because 0 is the leader
+			  for (int a = 0; a<Prm.NumAgents/2; a++) {
+
+			   //determine a random starting position
+			   Vector2D  SpawnPos = Vector2D(m_cxClient / 2.0 + RandomClamped()*m_cxClient / 2.0, m_cyClient / 2.0 + RandomClamped()*m_cyClient / 2.0);
+
+			   Vehicle* leader;
+			   Vector2D pursuerOffset;
+
+			   if (a == 0 || a == 1) {
+				   leader = m_pAgentLeaderHumain;
+			   }
+			   else {
+				   leader = m_Vehicles.at(m_Vehicles.size() - 2);
+			   }
+
+			   if (a % 2 == 0) {
+				   pursuerOffset = Vector2D((double)0, (double)-10);
+			   }
+			   else {
+				   pursuerOffset = Vector2D((double)0, (double)10);
+			   }
+
+			   AgentPoursuiveur* pAgentPoursuiveur = new AgentPoursuiveur(this,
+			    SpawnPos,                 //initial position
+			    RandFloat()*TwoPi,        //start rotation
+			    Vector2D(0, 0),            //velocity
+			    Prm.VehicleMass,          //mass
+			    Prm.MaxSteeringForce,     //max force
+			    Prm.MaxSpeed,             //max velocity
+			    Prm.MaxTurnRatePerSecond, //max turn rate
+			    Prm.VehicleScale,		  //scale
+			    leader,
+			    pursuerOffset,
+			    AGENTPOURSUIVEUR);
+			   m_Vehicles.push_back(pAgentPoursuiveur);
+
+			   //add it to the cell subdivision
+			   m_pCellSpace->AddEntity(pAgentPoursuiveur);
+			  }
+
+		  }
+		  else {
+			m_bAgentLeaderHumain = false;
+		  }
+		  CheckMenuItemAppropriately(hwnd, ID_AGENT_LEADER_HUMAIN, m_bAgentLeaderHumain);
 	  }
 
 	  break;
