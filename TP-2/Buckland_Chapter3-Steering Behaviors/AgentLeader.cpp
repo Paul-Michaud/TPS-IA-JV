@@ -62,7 +62,7 @@ void AgentLeader::removeAgentPoursuiveur(AgentPoursuiveur* agentPoursuiveur) {
 	size_t i;
 
 	//Delete the pursuer from the leader's queue
-	for (i = Prm.NumAgents - 1; i < m_vAgentsPoursuiveurs.size(); i++) {
+	for (i = m_vAgentsPoursuiveurs.size() - 1; i < m_vAgentsPoursuiveurs.size(); i++) {
 		if (m_vAgentsPoursuiveurs[i] == agentPoursuiveur) {
 			m_vAgentsPoursuiveurs.erase(m_vAgentsPoursuiveurs.begin() + i);
 			break;

@@ -288,7 +288,13 @@ void GameWorld::addPursuer() {
 //------------------------------------------------------------------------
 
 void GameWorld::removePursuer() {
-	
+		for (int a = m_Vehicles.size() - 1; a >= 0; a--) {
+			if (m_Vehicles[a] != m_pAgentLeader && m_Vehicles[a] != m_pAgentLeaderHumain) {
+				delete m_Vehicles[a];
+				m_Vehicles.erase(m_Vehicles.begin() + a);
+				break;
+			}
+		}
 }
 
 
