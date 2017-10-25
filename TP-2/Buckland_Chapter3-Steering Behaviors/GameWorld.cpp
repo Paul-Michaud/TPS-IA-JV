@@ -98,10 +98,18 @@ GameWorld::GameWorld(int cx, int cy) :
 //------------------------------------------------------------------------
 GameWorld::~GameWorld()
 {
-
-  for (int a=m_Vehicles.size()-1; a>=0 ; a--){
-    delete m_Vehicles[a];
+  //first we delete leaders
+  for (size_t a=0; a<m_Vehicles.size(); a++){
+	  if (m_Vehicles[a] == m_pAgentLeader || m_Vehicles[a] == m_pAgentLeaderHumain) {
+		  delete m_Vehicles[a];
+		  m_Vehicles.erase(m_Vehicles.begin() + a);
+	  }
   }
+  //then delete all other vehicle
+  for (size_t a = 0; a<m_Vehicles.size(); a++) {
+	  delete m_Vehicles[a];
+  }
+
 
   for (unsigned int ob=0; ob<m_Obstacles.size(); ++ob)
   {
@@ -242,6 +250,47 @@ void GameWorld::SetCrosshair(POINTS p)
   m_vCrosshair.y = (double)p.y;
 }
 
+//------------------------- createPursuer ------------------------------------
+//
+//------------------------------------------------------------------------
+
+void GameWorld::addPursuer() {
+	Vector2D SpawnPos = Vector2D(m_cxClient / 2.0 + RandomClamped()*m_cxClient / 2.0, m_cyClient / 2.0 + RandomClamped()*m_cyClient / 2.0);
+
+	AgentPoursuiveur* pAgentPoursuiveur = new AgentPoursuiveur(this,
+		SpawnPos,                 //initial position
+		RandFloat()*TwoPi,        //start rotation
+		Vector2D(0, 0),            //velocity
+		Prm.VehicleMass,          //mass
+		Prm.MaxSteeringForce,     //max force
+		Prm.MaxSpeed,             //max velocity
+		Prm.MaxTurnRatePerSecond, //max turn rate
+		Prm.VehicleScale,		  //scale
+		AGENTPOURSUIVEUR);
+
+	//pVehicle->Steering()->FlockingOn();
+	m_Vehicles.push_back(pAgentPoursuiveur);
+
+	//add it to the cell subdivision
+	m_pCellSpace->AddEntity(pAgentPoursuiveur);
+
+	//if there is a leader we assign it 
+	if (m_pAgentLeader != NULL && m_pAgentLeaderHumain != NULL) {
+		if (m_pAgentLeader->getNumberOfPursuer() >= m_pAgentLeaderHumain->getNumberOfPursuer()) m_pAgentLeaderHumain->addAgentPoursuiveur(pAgentPoursuiveur);
+		else m_pAgentLeader->addAgentPoursuiveur(pAgentPoursuiveur);
+	}
+	else if (m_pAgentLeader != NULL) m_pAgentLeader->addAgentPoursuiveur(pAgentPoursuiveur);
+	else if (m_pAgentLeaderHumain != NULL) m_pAgentLeaderHumain->addAgentPoursuiveur(pAgentPoursuiveur);
+}
+
+//------------------------- removePursuer ------------------------------------
+//
+//------------------------------------------------------------------------
+
+void GameWorld::removePursuer() {
+	
+}
+
 
 //------------------------- HandleKeyPresses -----------------------------
 void GameWorld::HandleKeyPresses(WPARAM wParam)
@@ -330,6 +379,17 @@ void GameWorld::HandleKeyPresses(WPARAM wParam)
 		}
 	break;
 
+	case 107: // plus pave num
+	{
+		addPursuer();
+	}
+	break;
+
+	case 109: //moins pave num
+	{
+		removePursuer();
+	}
+	break;
   }//end switch
 }
 
@@ -555,7 +615,7 @@ void GameWorld::HandleMenuItems(WPARAM wParam, HWND hwnd)
 				SIMPLE_QUEUE);
 
 			//All free pursuers will follow this new leader
-			for (int i = 0; i < Prm.NumAgents; i++) {
+			for (size_t i = 0; i < m_Vehicles.size(); i++) {
 				if ( ! ((AgentPoursuiveur*)m_Vehicles[i])->getFollowedVehicle() ) {
 					m_pAgentLeader->addAgentPoursuiveur((AgentPoursuiveur*)m_Vehicles[i]);
 				}
@@ -570,16 +630,16 @@ void GameWorld::HandleMenuItems(WPARAM wParam, HWND hwnd)
 
 			m_bAgentLeader = false;
 
-			for (size_t i = Prm.NumAgents - 1; i < m_Vehicles.size(); i++) {
+			for (size_t i = 0; i < m_Vehicles.size(); i++) {
 				if (m_Vehicles[i] == m_pAgentLeader) {
 					delete m_pAgentLeader;
 					m_pAgentLeader = NULL;
 					m_Vehicles.erase(m_Vehicles.begin() + i);
 				}
 			}
-			//We try to reassign his pursuers if there is a leader
+			//We try to reassign his pursuers (if they exists) if there is a leader
 			if (m_pAgentLeaderHumain != NULL) {
-				for (int i = 0; i < Prm.NumAgents; i++) {
+				for (size_t i = 0; i < m_Vehicles.size(); i++) {
 					if (!((AgentPoursuiveur*)m_Vehicles[i])->getFollowedVehicle()) {
 						m_pAgentLeaderHumain->addAgentPoursuiveur((AgentPoursuiveur*)m_Vehicles[i]);
 					}
@@ -617,7 +677,7 @@ void GameWorld::HandleMenuItems(WPARAM wParam, HWND hwnd)
 				FLOCKING_V_QUEUE);
 
 			//All free pursuers will follow this new human leader
-			for (int i = 0; i < Prm.NumAgents; i++) {
+			for (size_t i = 0; i < m_Vehicles.size(); i++) {
 				if ( ! ((AgentPoursuiveur*)m_Vehicles[i])->getFollowedVehicle() ) {
 					m_pAgentLeaderHumain->addAgentPoursuiveur((AgentPoursuiveur*)m_Vehicles[i]);
 				}
@@ -632,7 +692,7 @@ void GameWorld::HandleMenuItems(WPARAM wParam, HWND hwnd)
 
 			m_bAgentLeaderHumain = false;
 
-			for (size_t i = Prm.NumAgents-1; i < m_Vehicles.size(); i++){
+			for (size_t i = 0; i < m_Vehicles.size(); i++){
 				if (m_Vehicles[i] == m_pAgentLeaderHumain) {
 					delete m_pAgentLeaderHumain;
 					m_pAgentLeaderHumain = NULL;
@@ -641,7 +701,7 @@ void GameWorld::HandleMenuItems(WPARAM wParam, HWND hwnd)
 			}
 			//We try to reassign his pursuers if there is a leader
 			if (m_pAgentLeader != NULL) {
-				for (int i = 0; i < Prm.NumAgents; i++) {
+				for (size_t i = 0; i < m_Vehicles.size(); i++) {
 					if (!((AgentPoursuiveur*)m_Vehicles[i])->getFollowedVehicle()) {
 						m_pAgentLeader->addAgentPoursuiveur((AgentPoursuiveur*)m_Vehicles[i]);
 					}
@@ -652,6 +712,20 @@ void GameWorld::HandleMenuItems(WPARAM wParam, HWND hwnd)
 
 		CheckMenuItemAppropriately(hwnd, ID_AGENT_LEADER_HUMAIN, m_bAgentLeaderHumain);
 		break;
+
+	  case ID_ADD_PURSUER:
+	  {
+		  addPursuer();
+	  }
+
+	  break;
+
+	  case ID_REMOVE_PURSUER:
+	  {
+		  removePursuer();
+	  }
+
+	  break;
 
   }//end switch
 }

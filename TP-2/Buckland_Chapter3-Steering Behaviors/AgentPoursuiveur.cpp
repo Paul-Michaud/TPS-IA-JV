@@ -1,5 +1,6 @@
 #include "AgentPoursuiveur.h"
 #include "SteeringBehaviors.h"
+#include "AgentLeader.h"
 
 // A SUPPR// A SUPPR// A SUPPR// A SUPPR
 #include <iostream>
@@ -30,11 +31,13 @@ AgentPoursuiveur::AgentPoursuiveur(GameWorld* world,
 		max_turn_rate,
 		scale,
 		vehicule_type),
-	m_followedVehicle(NULL)
+	m_followedVehicle(NULL),
+	m_leaderOfMyQueue(NULL)
 {
 
 	this->Steering()->SeparationOn();
 	this->Steering()->FlockingOn();
+	this->Steering()->WallAvoidanceOn();
 
 }
 
@@ -43,10 +46,11 @@ AgentPoursuiveur::AgentPoursuiveur(GameWorld* world,
 //
 // Follow a vehicle with an offset
 //------------------------------------------------------------------------
-void AgentPoursuiveur::follow(Vehicle* const leader, Vector2D offset) {
-	m_followedVehicle = leader;
+void AgentPoursuiveur::follow(AgentLeader* const leaderOfMyQueue, Vehicle* const followedVehicle, Vector2D offset) {
+	m_followedVehicle = followedVehicle;
 	m_offset = offset;
-	this->Steering()->OffsetPursuitOn(leader, offset);
+	m_leaderOfMyQueue = leaderOfMyQueue;
+	this->Steering()->OffsetPursuitOn(followedVehicle, offset);
 }
 
 //------------------------------ stopFollowing ----------------------------------
@@ -55,6 +59,7 @@ void AgentPoursuiveur::follow(Vehicle* const leader, Vector2D offset) {
 //------------------------------------------------------------------------
 void AgentPoursuiveur::stopFollowing() {
 	m_followedVehicle = NULL;
+	m_leaderOfMyQueue = NULL;
 	m_offset = Vector2D(0,0);
 	this->Steering()->OffsetPursuitOff();
 }
@@ -64,5 +69,5 @@ void AgentPoursuiveur::stopFollowing() {
 //
 //------------------------------------------------------------------------
 AgentPoursuiveur::~AgentPoursuiveur() {
-
+	if(m_leaderOfMyQueue) m_leaderOfMyQueue->removeAgentPoursuiveur(this);
 }

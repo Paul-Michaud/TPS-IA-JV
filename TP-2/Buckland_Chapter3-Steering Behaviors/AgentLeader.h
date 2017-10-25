@@ -28,6 +28,9 @@ private:
 	//(vehicle to follow and offset) for the new pursuer
 	void getContextOfNewPursuer(Vehicle**, Vector2D**);
 
+	//Set the context of a pursuer add the the queue of the leader
+	void setContextOfPursuer(AgentPoursuiveur*);
+
 public:
 	AgentLeader(
 		GameWorld * world, 
@@ -45,6 +48,10 @@ public:
 	//Add a pursuer to this leader
 	void addAgentPoursuiveur(AgentPoursuiveur*);
 
+	//Remove a pursuer to this leader
+	void removeAgentPoursuiveur(AgentPoursuiveur*);
+
+	int getNumberOfPursuer() { return m_vAgentsPoursuiveurs.size(); }
 
 	~AgentLeader();
 };

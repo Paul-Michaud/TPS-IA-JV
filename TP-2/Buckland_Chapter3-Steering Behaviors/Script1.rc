@@ -57,6 +57,9 @@ BEGIN
     BEGIN
 		MENUITEM "Agent Leader On/Off",         ID_AGENT_LEADER
 		MENUITEM "Agent Leader Humain On/Off",	ID_AGENT_LEADER_HUMAIN
+		MENUITEM "Add pursuer",			ID_ADD_PURSUER
+		MENUITEM "Remove pursuer",		ID_REMOVE_PURSUER
+
     END
 END
 

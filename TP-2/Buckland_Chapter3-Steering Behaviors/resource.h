@@ -20,6 +20,9 @@
 #define IDM_PARTITION_VIEW_NEIGHBORS    40015
 #define ID_AGENT_LEADER                 40016
 #define ID_AGENT_LEADER_HUMAIN          40017
+#define ID_ADD_PURSUER					40018
+#define ID_REMOVE_PURSUER				40019
+
 
 // Next default values for new objects
 // 

@@ -16,8 +16,12 @@ class AgentLeader;
 
 class AgentPoursuiveur : public Vehicle{
 private:
-	//Which vehicle is following this pursuer
+	//Which vehicle is following this pursuer 
 	Vehicle* m_followedVehicle;
+
+	//Which "big" leader I'm following, the vehicle leading the queue
+	AgentLeader* m_leaderOfMyQueue;
+
 	//Following offset
 	Vector2D m_offset;
 
@@ -37,7 +41,7 @@ public:
 	~AgentPoursuiveur();
 
 	// Follow a leader with an offset
-	void follow(Vehicle* const, Vector2D);
+	void follow(AgentLeader* const, Vehicle* const, Vector2D);
 
 	// Stop following a vehicle
 	void stopFollowing();

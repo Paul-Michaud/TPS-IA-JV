@@ -26,7 +26,6 @@ AgentLeaderHumain::AgentLeaderHumain(GameWorld* world,
 			following_type)
 {
 	this->Steering()->WanderOff();
-	this->Steering()->ObstacleAvoidanceOn();
 }
 
 void AgentLeaderHumain::turnLeft() {

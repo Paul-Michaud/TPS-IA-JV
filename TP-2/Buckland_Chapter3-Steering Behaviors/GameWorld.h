@@ -88,7 +88,9 @@ private:
 
   void CreateWalls();
 
-  
+  void addPursuer();
+
+  void removePursuer();
 
 public:
   
