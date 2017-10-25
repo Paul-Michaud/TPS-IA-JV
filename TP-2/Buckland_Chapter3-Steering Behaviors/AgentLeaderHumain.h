@@ -15,7 +15,8 @@ public:
 		double max_speed,
 		double max_turn_rate,
 		double scale,
-		int    vehicule_type);
+		int vehicule_type,
+		int following_type);
 
 	//Moving functions
 	void turnRight();

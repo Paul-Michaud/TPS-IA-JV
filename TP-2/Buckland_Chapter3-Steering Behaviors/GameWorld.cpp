@@ -76,8 +76,9 @@ GameWorld::GameWorld(int cx, int cy):
 	  Prm.MaxSteeringForce,     //max force
 	  Prm.MaxSpeed,             //max velocity
 	  Prm.MaxTurnRatePerSecond, //max turn rate
-	  Prm.VehicleScale,
-	  AGENTLEADER);        //scale
+	  Prm.VehicleScale,         //scale
+	  AGENTLEADER,
+	  SIMPLE_QUEUE);
 
 								//pVehicle->Steering()->FlockingOn();
   m_Vehicles.push_back(pAgentLeader);
@@ -91,32 +92,31 @@ GameWorld::GameWorld(int cx, int cy):
 
   .......................................................*/
 
-  ////Start at one because 0 is the leader
-  //for (int a=0; a<Prm.NumAgents; ++a)
-  //{
+  //Start at one because 0 is the leader
+  for (int a=0; a<Prm.NumAgents; ++a){
 
-  //  //determine a random starting position
-  //  SpawnPos = Vector2D(cx/2.0+RandomClamped()*cx/2.0, cy/2.0+RandomClamped()*cy/2.0);
+    //determine a random starting position
+    SpawnPos = Vector2D(cx/2.0+RandomClamped()*cx/2.0, cy/2.0+RandomClamped()*cy/2.0);
 
-  //  AgentPoursuiveur* pAgentPoursuiveur = new AgentPoursuiveur(this,
-  //                                  SpawnPos,                 //initial position
-  //                                  RandFloat()*TwoPi,        //start rotation
-  //                                  Vector2D(0,0),            //velocity
-  //                                  Prm.VehicleMass,          //mass
-  //                                  Prm.MaxSteeringForce,     //max force
-  //                                  Prm.MaxSpeed,             //max velocity
-  //                                  Prm.MaxTurnRatePerSecond, //max turn rate
-  //                                  Prm.VehicleScale,		  //scale
-		//							m_Vehicles.back(),
-		//							Vector2D((double)-5, (double)0),
-		//							AGENTPOURSUIVEUR);
+    AgentPoursuiveur* pAgentPoursuiveur = new AgentPoursuiveur(this,
+                                    SpawnPos,                 //initial position
+                                    RandFloat()*TwoPi,        //start rotation
+                                    Vector2D(0,0),            //velocity
+                                    Prm.VehicleMass,          //mass
+                                    Prm.MaxSteeringForce,     //max force
+                                    Prm.MaxSpeed,             //max velocity
+                                    Prm.MaxTurnRatePerSecond, //max turn rate
+                                    Prm.VehicleScale,		  //scale
+									AGENTPOURSUIVEUR);
 
-  //  //pVehicle->Steering()->FlockingOn();
-  //  m_Vehicles.push_back(pAgentPoursuiveur);
+	pAgentLeader->addAgentPoursuiveur(pAgentPoursuiveur);
 
-  //  //add it to the cell subdivision
-  //  m_pCellSpace->AddEntity(pAgentPoursuiveur);
-  //}
+    //pVehicle->Steering()->FlockingOn();
+    m_Vehicles.push_back(pAgentPoursuiveur);
+
+    //add it to the cell subdivision
+    m_pCellSpace->AddEntity(pAgentPoursuiveur);
+  }
 
  
 
@@ -563,6 +563,8 @@ void GameWorld::HandleMenuItems(WPARAM wParam, HWND hwnd)
 	  case ID_AGENT_LEADER_HUMAIN: 
 	  {
 		  if (!m_bAgentLeaderHumain) {
+			  m_bAgentLeaderHumain = true;
+
 			  /* .......................................................
 
 			  SETUP THE HUMAN LEADER
@@ -580,12 +582,12 @@ void GameWorld::HandleMenuItems(WPARAM wParam, HWND hwnd)
 				  Prm.MaxSpeed,             //max velocity
 				  Prm.MaxTurnRatePerSecond, //max turn rate
 				  Prm.VehicleScale,         //scale
-				  AGENTLEADERHUMAIN);
+				  AGENTLEADERHUMAIN,
+				  FLOCKING_V_QUEUE);
 
 			  m_Vehicles.push_back(m_pAgentLeaderHumain);
 			  //add it to the cell subdivision
 			  m_pCellSpace->AddEntity(m_pAgentLeaderHumain);
-			  m_bAgentLeaderHumain = true;
 
 			  /* .......................................................
 
@@ -594,27 +596,10 @@ void GameWorld::HandleMenuItems(WPARAM wParam, HWND hwnd)
 			  .......................................................*/
 
 			  //Start at one because 0 is the leader
-			  for (int a = 0; a<Prm.NumAgents/2; a++) {
+			  for (int a = 0; a<Prm.NumAgents; a++) {
 
 			   //determine a random starting position
 			   Vector2D  SpawnPos = Vector2D(m_cxClient / 2.0 + RandomClamped()*m_cxClient / 2.0, m_cyClient / 2.0 + RandomClamped()*m_cyClient / 2.0);
-
-			   Vehicle* leader;
-			   Vector2D pursuerOffset;
-
-			   if (a == 0 || a == 1) {
-				   leader = m_pAgentLeaderHumain;
-			   }
-			   else {
-				   leader = m_Vehicles.at(m_Vehicles.size() - 2);
-			   }
-
-			   if (a % 2 == 0) {
-				   pursuerOffset = Vector2D((double)0, (double)-10);
-			   }
-			   else {
-				   pursuerOffset = Vector2D((double)0, (double)10);
-			   }
 
 			   AgentPoursuiveur* pAgentPoursuiveur = new AgentPoursuiveur(this,
 			    SpawnPos,                 //initial position
@@ -625,9 +610,10 @@ void GameWorld::HandleMenuItems(WPARAM wParam, HWND hwnd)
 			    Prm.MaxSpeed,             //max velocity
 			    Prm.MaxTurnRatePerSecond, //max turn rate
 			    Prm.VehicleScale,		  //scale
-			    leader,
-			    pursuerOffset,
 			    AGENTPOURSUIVEUR);
+
+			   m_pAgentLeaderHumain->addAgentPoursuiveur(pAgentPoursuiveur);
+
 			   m_Vehicles.push_back(pAgentPoursuiveur);
 
 			   //add it to the cell subdivision
@@ -637,6 +623,16 @@ void GameWorld::HandleMenuItems(WPARAM wParam, HWND hwnd)
 		  }
 		  else {
 			m_bAgentLeaderHumain = false;
+
+			/* .......................................................
+
+			
+
+			.......................................................*/
+			for (int i = 0; i < Prm.NumAgents + 1; i++){
+				delete m_Vehicles.back();
+				m_Vehicles.pop_back();
+			}
 		  }
 		  CheckMenuItemAppropriately(hwnd, ID_AGENT_LEADER_HUMAIN, m_bAgentLeaderHumain);
 	  }

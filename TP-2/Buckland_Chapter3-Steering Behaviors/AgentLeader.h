@@ -11,10 +11,23 @@
 //
 //------------------------------------------------------------------------
 #include "vehicle.h"
+#include "AgentPoursuiveur.h"
+#include "2d/Vector2D.h"
 
+#define SIMPLE_QUEUE 1
+#define FLOCKING_V_QUEUE 2
 
-class AgentLeader : public Vehicle
-{
+class AgentLeader : public Vehicle{
+private:
+	int m_following_type;
+
+	//All pursuers which are following this leader
+	std::vector<AgentPoursuiveur*> m_vAgentsPoursuiveurs;
+
+	//Initialize funtion's parameters with the context
+	//(vehicle to follow and offset) for the new pursuer
+	void getContextOfNewPursuer(Vehicle**, Vector2D**);
+
 public:
 	AgentLeader(
 		GameWorld * world, 
@@ -26,7 +39,12 @@ public:
 		double max_speed, 
 		double max_turn_rate, 
 		double scale,
-		int vehicule_type);
+		int vehicule_type,
+		int following_type);
+
+	//Add a pursuer to this leader
+	void addAgentPoursuiveur(AgentPoursuiveur*);
+
 
 	~AgentLeader();
 };

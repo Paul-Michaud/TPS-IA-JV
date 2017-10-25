@@ -11,7 +11,8 @@ AgentLeaderHumain::AgentLeaderHumain(GameWorld* world,
 		double    max_speed,
 		double    max_turn_rate,
 		double    scale,
-		int		  vehicule_type) : AgentLeader(
+		int		  vehicule_type,
+	    int       following_type) : AgentLeader(
 			world,
 			position,
 			rotation,
@@ -21,7 +22,8 @@ AgentLeaderHumain::AgentLeaderHumain(GameWorld* world,
 			max_speed,
 			max_turn_rate,
 			scale,
-			vehicule_type)
+			vehicule_type,
+			following_type)
 {
 	this->Steering()->WanderOff();
 }

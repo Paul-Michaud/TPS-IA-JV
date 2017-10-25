@@ -19,8 +19,6 @@ AgentPoursuiveur::AgentPoursuiveur(GameWorld* world,
 	double    max_speed,
 	double    max_turn_rate,
 	double    scale,
-	Vehicle* leaderLocal,
-	Vector2D pursuerOffset,
 	int vehicule_type) : Vehicle(
 		world,
 		position,
@@ -34,13 +32,26 @@ AgentPoursuiveur::AgentPoursuiveur(GameWorld* world,
 		vehicule_type)
 {
 
-	this->Steering()->OffsetPursuitOn(leaderLocal, pursuerOffset);
 	this->Steering()->SeparationOn();
 	this->Steering()->FlockingOn();
 
 }
 
 
+//------------------------------ follow ----------------------------------
+//
+// Follow a vehicle with an offset
+//------------------------------------------------------------------------
+void AgentPoursuiveur::follow(Vehicle* const leader, Vector2D offset) {
+	m_followedVehicle = leader;
+	m_offset = offset;
+	this->Steering()->OffsetPursuitOn(leader, offset);
+}
 
+
+//------------------------------ Destructor ------------------------------
+//
+//------------------------------------------------------------------------
 AgentPoursuiveur::~AgentPoursuiveur() {
+
 }

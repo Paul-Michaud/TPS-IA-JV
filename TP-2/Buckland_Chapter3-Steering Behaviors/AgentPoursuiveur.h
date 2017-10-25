@@ -10,11 +10,18 @@
 //  Author: Renald Morice & Paul Michaud 
 //
 //------------------------------------------------------------------------
-#include "vehicle.h"
+#include "Vehicle.h"
 
-class AgentPoursuiveur : public Vehicle
-{
-public :
+class AgentLeader;
+
+class AgentPoursuiveur : public Vehicle{
+private:
+	//Which vehicle is following this pursuer
+	Vehicle* m_followedVehicle;
+	//Following offset
+	Vector2D m_offset;
+
+public:
 	AgentPoursuiveur(GameWorld* world,
 		Vector2D position,
 		double    rotation,
@@ -24,12 +31,17 @@ public :
 		double    max_speed,
 		double    max_turn_rate,
 		double    scale,
-		Vehicle*  leaderLocal,
-		Vector2D pursuerOffset,
 		int vehicule_type);
 
+	//destructor
 	~AgentPoursuiveur();
 
+	// Follow a leader with an offset
+	void follow(Vehicle* const, Vector2D);
+
+	//accessors
+	Vehicle* getFollowedVehicle()const { return m_followedVehicle; }
+	Vector2D  getOffset()const { return m_offset; }
 };
 
 
