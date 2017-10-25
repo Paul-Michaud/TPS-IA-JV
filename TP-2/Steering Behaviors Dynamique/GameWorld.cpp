@@ -135,9 +135,21 @@ void GameWorld::Update(double time_elapsed)
   m_dAvFrameTime = FrameRateSmoother.Update(time_elapsed);
   
 
+
   //update the vehicles
-  for (unsigned int a=0; a<m_Vehicles.size(); ++a)
-  {
+  for (unsigned int a = 0; a < m_Vehicles.size(); ++a) {
+		  if (m_Vehicles[a] != m_pAgentLeader) {
+			  CellSpace()->CalculateNeighbors(m_Vehicles[a]->Pos(), Prm.ViewDistance);
+			  for (BaseGameEntity* pV = CellSpace()->begin(); !CellSpace()->end(); pV = CellSpace()->next()) {
+				  if (pV == m_pAgentLeader) {
+					  if (((AgentPoursuiveur*)m_Vehicles[a])->getLeaderOfMyQueue() != m_pAgentLeader) {
+						  ((AgentPoursuiveur*)m_Vehicles[a])->stopFollowing();
+						  m_pAgentLeader->addAgentPoursuiveur((AgentPoursuiveur*)m_Vehicles[a]);
+					  }
+					  
+				  }
+			  }
+		  }
     m_Vehicles[a]->Update(time_elapsed);
   }
 }
@@ -273,14 +285,6 @@ void GameWorld::addPursuer() {
 
 	//add it to the cell subdivision
 	m_pCellSpace->AddEntity(pAgentPoursuiveur);
-
-	//if there is a leader we assign it 
-	if (m_pAgentLeader != NULL && m_pAgentLeaderHumain != NULL) {
-		if (m_pAgentLeader->getNumberOfPursuer() >= m_pAgentLeaderHumain->getNumberOfPursuer()) m_pAgentLeaderHumain->addAgentPoursuiveur(pAgentPoursuiveur);
-		else m_pAgentLeader->addAgentPoursuiveur(pAgentPoursuiveur);
-	}
-	else if (m_pAgentLeader != NULL) m_pAgentLeader->addAgentPoursuiveur(pAgentPoursuiveur);
-	else if (m_pAgentLeaderHumain != NULL) m_pAgentLeaderHumain->addAgentPoursuiveur(pAgentPoursuiveur);
 }
 
 //------------------------- removePursuer ------------------------------------
@@ -503,6 +507,7 @@ void GameWorld::HandleMenuItems(WPARAM wParam, HWND hwnd)
 
     case IDM_PARTITION_VIEW_NEIGHBORS:
       {
+
         m_bShowCellSpaceInfo = !m_bShowCellSpaceInfo;
         
         if (m_bShowCellSpaceInfo)
@@ -620,13 +625,7 @@ void GameWorld::HandleMenuItems(WPARAM wParam, HWND hwnd)
 				AGENTLEADER,
 				SIMPLE_QUEUE);
 
-			//All free pursuers will follow this new leader
-			for (size_t i = 0; i < m_Vehicles.size(); i++) {
-				if ( ! ((AgentPoursuiveur*)m_Vehicles[i])->getFollowedVehicle() ) {
-					m_pAgentLeader->addAgentPoursuiveur((AgentPoursuiveur*)m_Vehicles[i]);
-				}
-			}
-
+			
 			m_Vehicles.push_back(m_pAgentLeader);
 			//add it to the cell subdivision
 			m_pCellSpace->AddEntity(m_pAgentLeader);
@@ -641,14 +640,6 @@ void GameWorld::HandleMenuItems(WPARAM wParam, HWND hwnd)
 					delete m_pAgentLeader;
 					m_pAgentLeader = NULL;
 					m_Vehicles.erase(m_Vehicles.begin() + i);
-				}
-			}
-			//We try to reassign his pursuers (if they exists) if there is a leader
-			if (m_pAgentLeaderHumain != NULL) {
-				for (size_t i = 0; i < m_Vehicles.size(); i++) {
-					if (!((AgentPoursuiveur*)m_Vehicles[i])->getFollowedVehicle()) {
-						m_pAgentLeaderHumain->addAgentPoursuiveur((AgentPoursuiveur*)m_Vehicles[i]);
-					}
 				}
 			}
 
@@ -682,13 +673,6 @@ void GameWorld::HandleMenuItems(WPARAM wParam, HWND hwnd)
 				AGENTLEADERHUMAIN,
 				FLOCKING_V_QUEUE);
 
-			//All free pursuers will follow this new human leader
-			for (size_t i = 0; i < m_Vehicles.size(); i++) {
-				if ( ! ((AgentPoursuiveur*)m_Vehicles[i])->getFollowedVehicle() ) {
-					m_pAgentLeaderHumain->addAgentPoursuiveur((AgentPoursuiveur*)m_Vehicles[i]);
-				}
-			}
-
 			m_Vehicles.push_back(m_pAgentLeaderHumain);
 			//add it to the cell subdivision
 			m_pCellSpace->AddEntity(m_pAgentLeaderHumain);
@@ -703,14 +687,6 @@ void GameWorld::HandleMenuItems(WPARAM wParam, HWND hwnd)
 					delete m_pAgentLeaderHumain;
 					m_pAgentLeaderHumain = NULL;
 					m_Vehicles.erase(m_Vehicles.begin() + i);
-				}
-			}
-			//We try to reassign his pursuers if there is a leader
-			if (m_pAgentLeader != NULL) {
-				for (size_t i = 0; i < m_Vehicles.size(); i++) {
-					if (!((AgentPoursuiveur*)m_Vehicles[i])->getFollowedVehicle()) {
-						m_pAgentLeader->addAgentPoursuiveur((AgentPoursuiveur*)m_Vehicles[i]);
-					}
 				}
 			}
 			

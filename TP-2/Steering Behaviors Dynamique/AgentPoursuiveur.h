@@ -25,6 +25,7 @@ private:
 	//Following offset
 	Vector2D m_offset;
 
+
 public:
 	AgentPoursuiveur(GameWorld* world,
 		Vector2D position,
@@ -49,6 +50,8 @@ public:
 	//accessors
 	Vehicle* getFollowedVehicle()const { return m_followedVehicle; }
 	Vector2D  getOffset()const { return m_offset; }
+	AgentLeader* getLeaderOfMyQueue()const { return m_leaderOfMyQueue; }
+
 };
 
 

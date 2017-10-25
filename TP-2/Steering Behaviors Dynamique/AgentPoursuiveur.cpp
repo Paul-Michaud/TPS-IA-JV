@@ -38,7 +38,7 @@ AgentPoursuiveur::AgentPoursuiveur(GameWorld* world,
 	this->Steering()->SeparationOn();
 	this->Steering()->FlockingOn();
 	this->Steering()->WallAvoidanceOn();
-
+	
 }
 
 
@@ -58,12 +58,12 @@ void AgentPoursuiveur::follow(AgentLeader* const leaderOfMyQueue, Vehicle* const
 // Stop following a vehicle
 //------------------------------------------------------------------------
 void AgentPoursuiveur::stopFollowing() {
+	if (m_leaderOfMyQueue) m_leaderOfMyQueue->removeAgentPoursuiveur(this);
 	m_followedVehicle = NULL;
 	m_leaderOfMyQueue = NULL;
 	m_offset = Vector2D(0,0);
 	this->Steering()->OffsetPursuitOff();
 }
-
 
 //------------------------------ Destructor ------------------------------
 //
@@ -71,3 +71,6 @@ void AgentPoursuiveur::stopFollowing() {
 AgentPoursuiveur::~AgentPoursuiveur() {
 	if(m_leaderOfMyQueue) m_leaderOfMyQueue->removeAgentPoursuiveur(this);
 }
+
+
+
