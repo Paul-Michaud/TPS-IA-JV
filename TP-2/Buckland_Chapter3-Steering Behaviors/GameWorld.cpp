@@ -570,11 +570,19 @@ void GameWorld::HandleMenuItems(WPARAM wParam, HWND hwnd)
 
 			m_bAgentLeader = false;
 
-			for (int i = Prm.NumAgents - 1; i < m_Vehicles.size(); i++) {
+			for (size_t i = Prm.NumAgents - 1; i < m_Vehicles.size(); i++) {
 				if (m_Vehicles[i] == m_pAgentLeader) {
 					delete m_pAgentLeader;
 					m_pAgentLeader = NULL;
 					m_Vehicles.erase(m_Vehicles.begin() + i);
+				}
+			}
+			//We try to reassign his pursuers if there is a leader
+			if (m_pAgentLeaderHumain != NULL) {
+				for (int i = 0; i < Prm.NumAgents; i++) {
+					if (!((AgentPoursuiveur*)m_Vehicles[i])->getFollowedVehicle()) {
+						m_pAgentLeaderHumain->addAgentPoursuiveur((AgentPoursuiveur*)m_Vehicles[i]);
+					}
 				}
 			}
 
@@ -624,14 +632,22 @@ void GameWorld::HandleMenuItems(WPARAM wParam, HWND hwnd)
 
 			m_bAgentLeaderHumain = false;
 
-			for (int i = Prm.NumAgents-1; i < m_Vehicles.size(); i++){
+			for (size_t i = Prm.NumAgents-1; i < m_Vehicles.size(); i++){
 				if (m_Vehicles[i] == m_pAgentLeaderHumain) {
 					delete m_pAgentLeaderHumain;
 					m_pAgentLeaderHumain = NULL;
 					m_Vehicles.erase(m_Vehicles.begin() + i);
 				}
 			}
-
+			//We try to reassign his pursuers if there is a leader
+			if (m_pAgentLeader != NULL) {
+				for (int i = 0; i < Prm.NumAgents; i++) {
+					if (!((AgentPoursuiveur*)m_Vehicles[i])->getFollowedVehicle()) {
+						m_pAgentLeader->addAgentPoursuiveur((AgentPoursuiveur*)m_Vehicles[i]);
+					}
+				}
+			}
+			
 		}
 
 		CheckMenuItemAppropriately(hwnd, ID_AGENT_LEADER_HUMAIN, m_bAgentLeaderHumain);

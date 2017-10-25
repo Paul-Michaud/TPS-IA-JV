@@ -84,5 +84,6 @@ void AgentLeader::getContextOfNewPursuer(Vehicle** leaderOfNewPursuer, Vector2D*
 //
 //------------------------------------------------------------------------
 AgentLeader::~AgentLeader() {
-	for (int i = 0; i < m_vAgentsPoursuiveurs.size(); i++) m_vAgentsPoursuiveurs[i]->stopFollowing();
+	for (size_t i = 0; i < m_vAgentsPoursuiveurs.size(); i++) m_vAgentsPoursuiveurs[i]->stopFollowing();
+	
 }

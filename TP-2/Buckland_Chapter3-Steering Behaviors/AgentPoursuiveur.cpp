@@ -49,7 +49,7 @@ void AgentPoursuiveur::follow(Vehicle* const leader, Vector2D offset) {
 	this->Steering()->OffsetPursuitOn(leader, offset);
 }
 
-//------------------------------ follow ----------------------------------
+//------------------------------ stopFollowing ----------------------------------
 //
 // Stop following a vehicle
 //------------------------------------------------------------------------
