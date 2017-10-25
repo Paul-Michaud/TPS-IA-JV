@@ -39,6 +39,9 @@ public:
 	// Follow a leader with an offset
 	void follow(Vehicle* const, Vector2D);
 
+	// Stop following a vehicle
+	void stopFollowing();
+
 	//accessors
 	Vehicle* getFollowedVehicle()const { return m_followedVehicle; }
 	Vector2D  getOffset()const { return m_offset; }

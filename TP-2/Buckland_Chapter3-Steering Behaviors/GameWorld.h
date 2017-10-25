@@ -64,6 +64,9 @@ private:
 
   //Pointer to our human leader
   AgentLeaderHumain*			m_pAgentLeaderHumain;
+
+  //Pointer to our leader
+  AgentLeader*			        m_pAgentLeader;
   
   //flags to turn aids and obstacles etc on/off
   bool  m_bShowWalls;
@@ -77,6 +80,7 @@ private:
   bool  m_bRenderNeighbors;
   bool  m_bViewKeys;
   bool  m_bShowCellSpaceInfo;
+  bool  m_bAgentLeader;
   bool  m_bAgentLeaderHumain;
 
 

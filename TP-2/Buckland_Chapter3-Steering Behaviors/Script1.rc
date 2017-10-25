@@ -55,7 +55,8 @@ BEGIN
     END
     POPUP "Game controls"
     BEGIN
-	MENUITEM "Agent Leader Humain On/Off",		ID_AGENT_LEADER_HUMAIN
+		MENUITEM "Agent Leader On/Off",         ID_AGENT_LEADER
+		MENUITEM "Agent Leader Humain On/Off",	ID_AGENT_LEADER_HUMAIN
     END
 END
 

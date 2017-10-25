@@ -29,7 +29,8 @@ AgentPoursuiveur::AgentPoursuiveur(GameWorld* world,
 		max_speed,
 		max_turn_rate,
 		scale,
-		vehicule_type)
+		vehicule_type),
+	m_followedVehicle(NULL)
 {
 
 	this->Steering()->SeparationOn();
@@ -46,6 +47,16 @@ void AgentPoursuiveur::follow(Vehicle* const leader, Vector2D offset) {
 	m_followedVehicle = leader;
 	m_offset = offset;
 	this->Steering()->OffsetPursuitOn(leader, offset);
+}
+
+//------------------------------ follow ----------------------------------
+//
+// Stop following a vehicle
+//------------------------------------------------------------------------
+void AgentPoursuiveur::stopFollowing() {
+	m_followedVehicle = NULL;
+	m_offset = Vector2D(0,0);
+	this->Steering()->OffsetPursuitOff();
 }
 
 
