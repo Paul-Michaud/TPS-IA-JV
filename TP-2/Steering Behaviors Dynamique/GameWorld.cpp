@@ -138,18 +138,48 @@ void GameWorld::Update(double time_elapsed)
 
   //update the vehicles
   for (unsigned int a = 0; a < m_Vehicles.size(); ++a) {
-		  if (m_Vehicles[a] != m_pAgentLeader) {
-			  CellSpace()->CalculateNeighbors(m_Vehicles[a]->Pos(), Prm.ViewDistance);
-			  for (BaseGameEntity* pV = CellSpace()->begin(); !CellSpace()->end(); pV = CellSpace()->next()) {
-				  if (pV == m_pAgentLeader) {
-					  if (((AgentPoursuiveur*)m_Vehicles[a])->getLeaderOfMyQueue() != m_pAgentLeader) {
-						  ((AgentPoursuiveur*)m_Vehicles[a])->stopFollowing();
-						  m_pAgentLeader->addAgentPoursuiveur((AgentPoursuiveur*)m_Vehicles[a]);
-					  }
-					  
-				  }
+
+	  if(m_Vehicles[a] != m_pAgentLeader && m_Vehicles[a] != m_pAgentLeaderHumain){
+
+		  AgentLeader* leaderToFollow = NULL;
+
+		  if (m_pAgentLeader && m_pAgentLeaderHumain) {
+			  Vector2D vectDist1(m_pAgentLeader->Pos() - m_Vehicles[a]->Pos());
+			  Vector2D vectDist2(m_pAgentLeaderHumain->Pos() - m_Vehicles[a]->Pos());
+
+			  if (vectDist1.Length() <= vectDist2.Length() && vectDist1.Length() <= Prm.ViewDistance) leaderToFollow = m_pAgentLeader;
+			  else if(vectDist1.Length() > vectDist2.Length() && vectDist2.Length() <= Prm.ViewDistance) leaderToFollow = m_pAgentLeaderHumain;
+		  }
+		  else if (m_pAgentLeader) {
+			  Vector2D vectDist(m_pAgentLeader->Pos() - m_Vehicles[a]->Pos());
+			  if (vectDist.Length() <= Prm.ViewDistance) leaderToFollow = m_pAgentLeader;
+		  }
+		  else if (m_pAgentLeaderHumain) {
+			  Vector2D vectDist(m_pAgentLeaderHumain->Pos() - m_Vehicles[a]->Pos());
+			  if (vectDist.Length() <= Prm.ViewDistance) leaderToFollow = m_pAgentLeaderHumain;
+		  }
+
+		  if(leaderToFollow){
+			  if (((AgentPoursuiveur*)m_Vehicles[a])->getLeaderOfMyQueue() != leaderToFollow) {
+				  ((AgentPoursuiveur*)m_Vehicles[a])->stopFollowing();
+				  leaderToFollow->addAgentPoursuiveur((AgentPoursuiveur*)m_Vehicles[a]);
 			  }
 		  }
+
+	  }
+
+	/*if (m_Vehicles[a] != m_pAgentLeader) {
+		CellSpace()->CalculateNeighbors(m_Vehicles[a]->Pos(), Prm.ViewDistance);
+		for (BaseGameEntity* pV = CellSpace()->begin(); !CellSpace()->end(); pV = CellSpace()->next()) {
+			if (pV == m_pAgentLeader) {
+				if (((AgentPoursuiveur*)m_Vehicles[a])->getLeaderOfMyQueue() != m_pAgentLeader) {
+					((AgentPoursuiveur*)m_Vehicles[a])->stopFollowing();
+					m_pAgentLeader->addAgentPoursuiveur((AgentPoursuiveur*)m_Vehicles[a]);
+				}
+					  
+			}
+		}
+	}*/
     m_Vehicles[a]->Update(time_elapsed);
   }
 }
