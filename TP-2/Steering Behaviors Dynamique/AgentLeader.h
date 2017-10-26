@@ -19,6 +19,8 @@
 
 class AgentLeader : public Vehicle{
 private:
+
+	//The queue type (simple queue or V queue)
 	int m_following_type;
 
 	//All pursuers which are following this leader
@@ -46,9 +48,11 @@ public:
 
 	//Remove a pursuer to this leader
 	void removeAgentPoursuiveur(AgentPoursuiveur*);
-
+	
+	//Return the number of pursuers in this leader's queue
 	int getNumberOfPursuer() { return m_vAgentsPoursuiveurs.size(); }
 
+	//Destructor
 	~AgentLeader();
 };
 

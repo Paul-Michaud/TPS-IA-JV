@@ -12,7 +12,6 @@
 #include "misc/WindowUtils.h"
 #include "misc/Stream_Utility_Functions.h"
 
-
 #include "resource.h"
 
 

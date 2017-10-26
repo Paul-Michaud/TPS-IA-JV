@@ -36,7 +36,9 @@ AgentLeader::AgentLeader(GameWorld* world,
 
 //------------------------------ addAgentPoursuiveur ---------------------
 //
-//  Add a pursuer to this leader
+//  Add a pursuer to this leader, it unfollows his precedent leader
+//	then we add it to this leaders's queue and set his offset and 
+//	the entity he has to follow with setContextOfPursuer
 //------------------------------------------------------------------------
 void AgentLeader::addAgentPoursuiveur(AgentPoursuiveur* agentPoursuiveur) {
 
@@ -50,8 +52,9 @@ void AgentLeader::addAgentPoursuiveur(AgentPoursuiveur* agentPoursuiveur) {
 
 //------------------------------ removeAgentPoursuiveur ---------------------
 //
-//  remove a pursuer to this leader
-//------------------------------------------------------------------------
+//  remove a pursuer from this leader, we remove it from the queue, and we 
+//	update positions from all pursuers that were behind him
+//---------------------------------------------------------------------------
 void AgentLeader::removeAgentPoursuiveur(AgentPoursuiveur* agentPoursuiveur) {
 	unsigned int i;
 
@@ -72,8 +75,8 @@ void AgentLeader::removeAgentPoursuiveur(AgentPoursuiveur* agentPoursuiveur) {
 //------------------------------ setContextOfPursuer -----------------
 //
 //  Initialize a pursuer's leader & offset considering his position 
-//	in the leader's queue
-//-----------------------------------------------------------------------
+//	in the queue, and the type of queue
+//--------------------------------------------------------------------
 void AgentLeader::setContextOfPursuer(AgentPoursuiveur* pursuer) {
 	Vehicle* leaderOfNewPursuer;
 	unsigned int i;
