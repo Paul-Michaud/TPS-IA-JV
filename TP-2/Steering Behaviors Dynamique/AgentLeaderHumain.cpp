@@ -26,6 +26,7 @@ AgentLeaderHumain::AgentLeaderHumain(GameWorld* world,
 			following_type)
 {
 	this->Steering()->WanderOff();
+	this->SetMaxTurnRate(10);
 }
 
 void AgentLeaderHumain::turnLeft() {

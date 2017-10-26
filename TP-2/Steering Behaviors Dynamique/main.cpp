@@ -12,10 +12,6 @@
 #include "resource.h"
 #include "misc/WindowUtils.h"
 
-// A SUPPR// A SUPPR// A SUPPR// A SUPPR
-#include <iostream>
-using namespace std;
-// A SUPPR// A SUPPR// A SUPPR// A SUPPR
 
 //--------------------------------- Globals ------------------------------
 //

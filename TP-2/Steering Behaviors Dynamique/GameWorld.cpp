@@ -22,11 +22,6 @@
 #include <list>
 using std::list;
 
-// A SUPPR// A SUPPR// A SUPPR// A SUPPR
-#include <iostream>
-using namespace std;
-// A SUPPR// A SUPPR// A SUPPR// A SUPPR
-
 
 //------------------------------- ctor -----------------------------------
 //------------------------------------------------------------------------
@@ -673,7 +668,6 @@ void GameWorld::HandleMenuItems(WPARAM wParam, HWND hwnd)
 
 		}
 
-		CheckMenuItemAppropriately(hwnd, ID_AGENT_LEADER, m_bAgentLeader);
 		break;
 
 	  case ID_AGENT_LEADER_HUMAIN: 
@@ -720,7 +714,6 @@ void GameWorld::HandleMenuItems(WPARAM wParam, HWND hwnd)
 			
 		}
 
-		CheckMenuItemAppropriately(hwnd, ID_AGENT_LEADER_HUMAIN, m_bAgentLeaderHumain);
 		break;
 
 	  case ID_ADD_PURSUER:
