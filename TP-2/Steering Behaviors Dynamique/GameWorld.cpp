@@ -88,7 +88,11 @@ GameWorld::GameWorld(int cx, int cy) :
 
 }
 
-//-------------------------------- dtor ----------------------------------
+//-------------------------------- Destructor ----------------------------
+// 
+//	We take into account that we have to delete the leaders before the
+//	pursuers because we have to empty leader's queue, so if we delete
+//	pursuers before, we'll get an error.
 //------------------------------------------------------------------------
 GameWorld::~GameWorld()
 {
@@ -133,6 +137,8 @@ void GameWorld::Update(double time_elapsed)
   //update the vehicles
   for (unsigned int a = 0; a < m_Vehicles.size(); ++a) {
 
+	  // For every pursuers we calculate the distance to both leaders (if they exist)
+	  // and we decide to follow the closer one if the distance is in the viewDistance
 	  if(m_Vehicles[a] != m_pAgentLeader && m_Vehicles[a] != m_pAgentLeaderHumain){
 
 		  AgentLeader* leaderToFollow = NULL;
@@ -160,6 +166,8 @@ void GameWorld::Update(double time_elapsed)
 		  }
 
 	  }
+
+	  // We did not use the following method because it wasn't detecting correctly the neighbors
 
 	/*if (m_Vehicles[a] != m_pAgentLeader) {
 		CellSpace()->CalculateNeighbors(m_Vehicles[a]->Pos(), Prm.ViewDistance);
@@ -284,8 +292,9 @@ void GameWorld::SetCrosshair(POINTS p)
   m_vCrosshair.y = (double)p.y;
 }
 
-//------------------------- createPursuer ------------------------------------
+//------------------------- addPursuer --------------------------------
 //
+//	Add a pursuer to the world
 //------------------------------------------------------------------------
 
 void GameWorld::addPursuer() {
@@ -309,8 +318,9 @@ void GameWorld::addPursuer() {
 	m_pCellSpace->AddEntity(pAgentPoursuiveur);
 }
 
-//------------------------- removePursuer ------------------------------------
-//
+//------------------------- removePursuer --------------------------------
+// 
+//	Remove a pursuer from the world
 //------------------------------------------------------------------------
 
 void GameWorld::removePursuer() {
