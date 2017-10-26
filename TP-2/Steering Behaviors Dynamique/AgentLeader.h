@@ -24,10 +24,6 @@ private:
 	//All pursuers which are following this leader
 	std::vector<AgentPoursuiveur*> m_vAgentsPoursuiveurs;
 
-	//Initialize funtion's parameters with the context
-	//(vehicle to follow and offset) for the new pursuer
-	void getContextOfNewPursuer(Vehicle**, Vector2D**);
-
 	//Set the context of a pursuer add the the queue of the leader
 	void setContextOfPursuer(AgentPoursuiveur*);
 

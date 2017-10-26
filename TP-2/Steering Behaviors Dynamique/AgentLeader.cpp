@@ -40,13 +40,7 @@ AgentLeader::AgentLeader(GameWorld* world,
 //------------------------------------------------------------------------
 void AgentLeader::addAgentPoursuiveur(AgentPoursuiveur* agentPoursuiveur) {
 
-	//Vehicle* leaderOfNewPursuer;
-	//Vector2D* offsetOfNewPursuer;
-	//getContextOfNewPursuer(&leaderOfNewPursuer, &offsetOfNewPursuer);
-
-	//agentPoursuiveur->follow(leaderOfNewPursuer, *offsetOfNewPursuer);
-
-	//this->m_vAgentsPoursuiveurs.push_back(agentPoursuiveur);
+	agentPoursuiveur->stopFollowing();
 
 	this->m_vAgentsPoursuiveurs.push_back(agentPoursuiveur);
 
@@ -59,49 +53,20 @@ void AgentLeader::addAgentPoursuiveur(AgentPoursuiveur* agentPoursuiveur) {
 //  remove a pursuer to this leader
 //------------------------------------------------------------------------
 void AgentLeader::removeAgentPoursuiveur(AgentPoursuiveur* agentPoursuiveur) {
-	size_t i;
+	unsigned int i;
 
 	//Delete the pursuer from the leader's queue
-	for (i = m_vAgentsPoursuiveurs.size() - 1; i < m_vAgentsPoursuiveurs.size(); i++) {
+	for (i = 0; i < m_vAgentsPoursuiveurs.size(); i++) {
 		if (m_vAgentsPoursuiveurs[i] == agentPoursuiveur) {
 			m_vAgentsPoursuiveurs.erase(m_vAgentsPoursuiveurs.begin() + i);
 			break;
 		}
 	}
+
 	//Update the pursuers that are after this one in the leader's queue
-	for (size_t j = i; j < m_vAgentsPoursuiveurs.size(); j++) {
+	for (unsigned int j = i; j < m_vAgentsPoursuiveurs.size(); j++) {
 		setContextOfPursuer(m_vAgentsPoursuiveurs[j]);
 	}
-}
-
-//------------------------------ getContextOfNewPursuer -----------------
-//
-//  Initialize funtion's parameters with the context
-//  (vehicle to follow and offset) for the new pursuer
-//-----------------------------------------------------------------------
-void AgentLeader::getContextOfNewPursuer(Vehicle** leaderOfNewPursuer, Vector2D** offsetOfNewPursuer) {
-
-	switch (m_following_type) {
-		case SIMPLE_QUEUE: //-------------------
-			if (this->m_vAgentsPoursuiveurs.size() == 0) *leaderOfNewPursuer = (Vehicle*)this;
-			else *leaderOfNewPursuer = (Vehicle*)this->m_vAgentsPoursuiveurs.back();
-
-			(*offsetOfNewPursuer) = new Vector2D(-5.0, 0);
-
-			break;
-
-		case FLOCKING_V_QUEUE:
-			if (this->m_vAgentsPoursuiveurs.size() == 0 || this->m_vAgentsPoursuiveurs.size() == 1) *leaderOfNewPursuer = (Vehicle*)this;
-			else *leaderOfNewPursuer = (Vehicle*) this->m_vAgentsPoursuiveurs.at(this->m_vAgentsPoursuiveurs.size() - 2);
-
-			if (this->m_vAgentsPoursuiveurs.size() % 2 == 0) (*offsetOfNewPursuer) = new Vector2D(0.0, -10.0);
-			else (*offsetOfNewPursuer) = new Vector2D(0.0, 10.0);
-			break;
-
-		default:
-			break;
-	}
-	
 }
 
 //------------------------------ setContextOfPursuer -----------------
@@ -111,7 +76,7 @@ void AgentLeader::getContextOfNewPursuer(Vehicle** leaderOfNewPursuer, Vector2D*
 //-----------------------------------------------------------------------
 void AgentLeader::setContextOfPursuer(AgentPoursuiveur* pursuer) {
 	Vehicle* leaderOfNewPursuer;
-	size_t i;
+	unsigned int i;
 	Vector2D offsetOfNewPursuer;
 
 	//Get the position of the added pursuer

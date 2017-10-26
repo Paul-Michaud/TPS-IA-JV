@@ -161,7 +161,6 @@ void GameWorld::Update(double time_elapsed)
 
 		  if(leaderToFollow){
 			  if (((AgentPoursuiveur*)m_Vehicles[a])->getLeaderOfMyQueue() != leaderToFollow) {
-				  ((AgentPoursuiveur*)m_Vehicles[a])->stopFollowing();
 				  leaderToFollow->addAgentPoursuiveur((AgentPoursuiveur*)m_Vehicles[a]);
 			  }
 		  }
@@ -173,7 +172,6 @@ void GameWorld::Update(double time_elapsed)
 		for (BaseGameEntity* pV = CellSpace()->begin(); !CellSpace()->end(); pV = CellSpace()->next()) {
 			if (pV == m_pAgentLeader) {
 				if (((AgentPoursuiveur*)m_Vehicles[a])->getLeaderOfMyQueue() != m_pAgentLeader) {
-					((AgentPoursuiveur*)m_Vehicles[a])->stopFollowing();
 					m_pAgentLeader->addAgentPoursuiveur((AgentPoursuiveur*)m_Vehicles[a]);
 				}
 					  
@@ -324,7 +322,7 @@ void GameWorld::addPursuer() {
 void GameWorld::removePursuer() {
 		for (int a = m_Vehicles.size() - 1; a >= 0; a--) {
 			if (m_Vehicles[a] != m_pAgentLeader && m_Vehicles[a] != m_pAgentLeaderHumain) {
-				delete m_Vehicles[a];
+				delete (AgentPoursuiveur*)m_Vehicles[a];
 				m_Vehicles.erase(m_Vehicles.begin() + a);
 				break;
 			}
