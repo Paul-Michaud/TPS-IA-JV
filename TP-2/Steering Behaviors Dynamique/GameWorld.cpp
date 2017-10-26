@@ -167,7 +167,8 @@ void GameWorld::Update(double time_elapsed)
 
 	  }
 
-	  // We did not use the following method because it wasn't detecting correctly the neighbors
+    // We did not use the following method because it wasn't detecting correctly the neighbors
+	// This was tested only for m_pAgentLeader
 
 	/*if (m_Vehicles[a] != m_pAgentLeader) {
 		CellSpace()->CalculateNeighbors(m_Vehicles[a]->Pos(), Prm.ViewDistance);
@@ -180,6 +181,7 @@ void GameWorld::Update(double time_elapsed)
 			}
 		}
 	}*/
+
     m_Vehicles[a]->Update(time_elapsed);
   }
 }
