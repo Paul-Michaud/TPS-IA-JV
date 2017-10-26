@@ -2,9 +2,6 @@
 #include "SteeringBehaviors.h"
 #include "AgentLeader.h"
 
-//------------------------------ ctor ----------------------------------
-//
-//------------------------------------------------------------------------
 
 AgentPoursuiveur::AgentPoursuiveur(GameWorld* world,
 	Vector2D position,

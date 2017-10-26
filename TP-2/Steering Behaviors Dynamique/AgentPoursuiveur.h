@@ -16,14 +16,14 @@ class AgentLeader;
 
 class AgentPoursuiveur : public Vehicle{
 private:
-	//Which vehicle is following this pursuer 
+	//Which vehicle this object has to follow (his queue's predecessor)
 	Vehicle* m_followedVehicle;
-
-	//Which "big" leader I'm following, the vehicle leading the queue
-	AgentLeader* m_leaderOfMyQueue;
 
 	//Following offset
 	Vector2D m_offset;
+
+	//Agent leading the queue
+	AgentLeader* m_leaderOfMyQueue;
 
 
 public:

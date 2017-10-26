@@ -24,6 +24,7 @@ public:
 	void accelerate();
 	void decelerate();
 
+	//Destructor
 	~AgentLeaderHumain();
 
 };
