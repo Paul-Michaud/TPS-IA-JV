@@ -2,7 +2,6 @@
 *.suo
 *.db
 *.ipch
-*.sln
 *.obj
 *.sbr
 *.idb
@@ -13,11 +12,5 @@
 *.ilk
 *.htm
 *.log
-*.vcproj
-*.dsp
 *.exe
-*.filters
-*.vcxproj
-*.dsw
-*.user
 Debug/
